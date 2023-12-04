@@ -12,16 +12,16 @@ func ping(c *gin.Context) {
 }
 
 func main() {
-	cup := Cup{Product{"Standard cup", "c0001", 1.0}, MEDIUM}
+	//cup := Cup{Product{"Standard cup", "c0001", 1.0}, MEDIUM}
 
-	bean := CoffeeBean{Product{"Colombia Las Flores", "1234", 9.8}, "Arabica Red Bourbon", "Acevedo, Huila, Brazil"}
-
-	fmt.Println(bean)
-	fmt.Println(cup)
+	//fmt.Println(cup)
 
 	fmt.Println("hello, world")
 
+	productController := NewProductController()
+
 	r := gin.Default()
 	r.GET("/ping", ping)
+	r.GET("/getcoffeebeans", productController.GetCoffeeBeans)
 	r.Run()
 }
