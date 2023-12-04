@@ -2,10 +2,7 @@ module coffee_shop_backend
 
 go 1.20
 
-require (
-	coffee_shop_backend/ping v0.0.0
-	github.com/gin-gonic/gin v1.9.1
-)
+require github.com/gin-gonic/gin v1.9.1
 
 require (
 	github.com/bytedance/sonic v1.10.2 // indirect
@@ -34,5 +31,3 @@ require (
 	google.golang.org/protobuf v1.31.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
-
-replace coffee_shop_backend/ping => ./ping
