@@ -1,0 +1,49 @@
+.cont{
+    display: inline-block;
+}
+
+.b {
+    position: absolute;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    top: auto;
+    left: 0%;
+    right: 0%;
+    min-height: 94%;
+    min-width: 100%;
+}
+
+.bg {
+    min-height: 100%;
+    min-width: 100%;
+    background-image: url("/assets/preview16.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-color: transparent;
+}
+
+.title{
+    position: absolute;
+    left: 5%;
+    font-size: 5rem;
+    color: azure;
+    text-align: center;
+    text-decoration: underline;
+}
+
+.par{
+    font-size: 2rem;
+    position: absolute;
+    text-align: center;
+    text-decoration: none;
+}
+
+.cc{
+    right: 1%;
+    bottom: -1%;
+    color: azure;
+    position: absolute;
+    font-size: 1rem;
+    text-align: center;
+}
