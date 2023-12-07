@@ -31,3 +31,16 @@ func NewProductController() *ProductController {
 func (p *ProductController) GetCoffeeBeans(c *gin.Context) {
 	c.JSON(http.StatusOK, p.coffeebeans)
 }
+
+func (p *ProductController) GetCoffeeBeansById(c *gin.Context) {
+	id := c.Param("id")
+
+	for _, item := range p.coffeebeans {
+		if item.Id == id {
+			c.JSON(http.StatusOK, item)
+			return
+		}
+	}
+
+	c.JSON(http.StatusNotFound, gin.H{"message": "coffee beans not found"})
+}
