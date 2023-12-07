@@ -1,0 +1,1 @@
+curl -X POST  -H "Accept: Application/json" -H "Content-Type: application/json" http://127.1:8080/postcoffeebeans -d '{"product":{"name":"Filter with Rum flavour","id":"B3","price":4.43},"species":"80% Arabica 20% Robusta","area":"","weight":200}'

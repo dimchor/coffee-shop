@@ -24,5 +24,6 @@ func main() {
 	r.GET("/ping", ping)
 	r.GET("/getcoffeebeans", productController.GetCoffeeBeans)
 	r.GET("/getcoffeebeans/:id", productController.GetCoffeeBeansById)
+	r.POST("/postcoffeebeans", productController.PostCoffeeBeans)
 	r.Run()
 }

@@ -7,6 +7,7 @@ import (
 )
 
 type ProductController struct {
+	// temporary, GORM will be used in the (near) future
 	coffeebeans []CoffeeBean
 }
 
@@ -43,4 +44,25 @@ func (p *ProductController) GetCoffeeBeansById(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusNotFound, gin.H{"message": "coffee beans not found"})
+}
+
+func (p *ProductController) PostCoffeeBeans(c *gin.Context) {
+	var coffeeBean CoffeeBean
+
+	if err := c.BindJSON(&coffeeBean); err != nil {
+		// TODO: find a proper return code for failure to bind JSON
+		return
+	}
+
+	for _, item := range p.coffeebeans {
+		if item.Id == coffeeBean.Id {
+			// TODO: find a proper return code for same id
+			return
+		}
+	}
+
+	// perform other checks here, if needed
+
+	p.coffeebeans = append(p.coffeebeans, coffeeBean)
+	c.JSON(http.StatusCreated, coffeeBean)
 }
