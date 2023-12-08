@@ -1,7 +1,7 @@
 package main
 
 type Product struct {
+	Id    uint64  `json:"id"`
 	Name  string  `json:"name"`
-	Id    string  `json:"id"`
 	Price float64 `json:"price"`
 }
