@@ -9,6 +9,6 @@ const (
 )
 
 type Cup struct {
-	Product
-	size cup_size
+	Product `json:"product"`
+	Size    cup_size `json:"size"`
 }

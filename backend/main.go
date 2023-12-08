@@ -22,8 +22,13 @@ func main() {
 
 	r := gin.Default()
 	r.GET("/ping", ping)
+
 	r.GET("/getcoffeebeans", productController.GetCoffeeBeans)
-	r.GET("/getcoffeebeans/:id", productController.GetCoffeeBeansById)
+	r.GET("/getcoffeebean/:id", productController.GetCoffeeBeansById)
 	r.POST("/postcoffeebeans", productController.PostCoffeeBeans)
+
+	r.GET("/getcups", productController.GetCups)
+	r.GET("/getcup/:id", productController.GetCupsById)
+	r.POST("/postcup", productController.PostCup)
 	r.Run()
 }
