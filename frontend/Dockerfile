@@ -6,5 +6,5 @@ COPY . .
 RUN npm install
 RUN npm run build --prod
 
-FROM nginx
+FROM docker.io/library/nginx
 COPY --from=angular /app/dist/frontend/browser /usr/share/nginx/html
