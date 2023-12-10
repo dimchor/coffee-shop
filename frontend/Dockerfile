@@ -1,4 +1,4 @@
-FROM node:20 as angular
+FROM docker.io/library/node:20 as angular
 
 WORKDIR /app
 
