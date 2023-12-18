@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SearchFilterPipe } from '../search-filter.pipe';
 import { ProductComponent } from '../product/product.component';
 import { ProductsPageComponent } from '../products-page/products-page.component';
 import { FormsModule } from '@angular/forms';
@@ -11,7 +10,7 @@ import { Output } from '@angular/core';
     standalone: true,
     templateUrl: './product-filters.component.html',
     styleUrl: './product-filters.component.css',
-    imports: [CommonModule, SearchFilterPipe, ProductsPageComponent, FormsModule]
+    imports: [CommonModule, ProductsPageComponent, FormsModule]
 })
 
 export class ProductFiltersComponent {
@@ -25,7 +24,6 @@ export class ProductFiltersComponent {
             return [];
         }
         if (!arg1) {
-            alert("no string");
             return this.list;
         }
 
@@ -43,7 +41,6 @@ export class ProductFiltersComponent {
         return this.res;
     }
 
-    // filterPipe = new SearchFilterPipe();
     res: ProductComponent[] = this.list
     searchText = "";
 

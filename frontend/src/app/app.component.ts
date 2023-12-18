@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { RouterModule } from '@angular/router';
 import { HomepageComponent } from './homepage/homepage.component';
-import { SearchFilterPipe } from './search-filter.pipe';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
@@ -12,7 +11,7 @@ import { FormsModule } from '@angular/forms';
   standalone: true,
   imports: [CommonModule, FormsModule, RouterOutlet,
     HomepageComponent, RouterLink, RouterLinkActive,
-    RouterModule, SearchFilterPipe],
+    RouterModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
