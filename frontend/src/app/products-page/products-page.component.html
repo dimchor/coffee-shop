@@ -1,0 +1,5 @@
+<app-navbar></app-navbar>
+
+
+<app-product-filters (msg)="receiveMSG($event)" [list]="productList"></app-product-filters>
+<app-product-grid [list]="productList" [filteredList]="filteredList"></app-product-grid>

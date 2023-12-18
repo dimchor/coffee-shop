@@ -8,20 +8,20 @@
         <div class="product">
             <div class="product-container">
 
-                    <div class="product-item" *ngFor="let product of productList; index as ii">
-                        <div class="product-img">
-                            <img src="{{product.pImagePath}}" alt="image">
-                            <div>
-                                <button type="button" class="add-btn">Add to Cart</button>
-                            </div>
-                        </div>
-                        <div class="product-content">
-                            <a href="#" class="product-name">{{product.pName}}</a>
-                            <div>
-                                <span class="price">$ {{product.pPrice}}</span>
-                            </div>
+                <div class="product-item" *ngFor="let product of filteredList; index as ii">
+                    <div class="product-img">
+                        <img src="{{product.pImagePath}}" alt="image">
+                        <div>
+                            <button type="button" class="add-btn">Add to Cart</button>
                         </div>
                     </div>
+                    <div class="product-content">
+                        <a href="#" class="product-name">{{product.pName}}</a>
+                        <div>
+                            <span class="price">$ {{product.pPrice}}</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
