@@ -1,10 +1,22 @@
 FROM docker.io/library/node:20 as angular
 
-WORKDIR /app
+ARG PROJECTDIR=/app
+ENV PATH ${PROJECTDIR}/node_modules/.bin:$PATH
 
-COPY . .
+RUN mkdir ${PROJECTDIR}
+WORKDIR ${PROJECTDIR}
+
+COPY package.json ${PROJECTDIR}
+COPY package-lock.json ${PROJECTDIR}
+
+RUN npm install @angular/cli
 RUN npm install
-RUN npm run build --prod
+#RUN npm run build --prod
+COPY . ${PROJECTDIR}
 
-FROM docker.io/library/nginx
-COPY --from=angular /app/dist/frontend/browser /usr/share/nginx/html
+EXPOSE 4200
+
+CMD [ "ng", "serve" ]
+
+#FROM docker.io/library/nginx
+#COPY --from=angular /app/dist/frontend/browser /usr/share/nginx/html
