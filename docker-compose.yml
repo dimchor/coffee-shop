@@ -6,3 +6,19 @@ services:
   frontend:
     build: ./frontend
     ports: "4200:4200"
+  db:
+    image: docker.io/library/mysql:latest
+    # add volumes
+    environment: 
+      MYSQL_ROOT_PASSWORD: /run/secrets/mysql_root_password
+    secrets: 
+      - mysql_root_password
+  adminer:
+    image: docker.io/library/adminer:latest
+    restart: always
+    ports: "8081:8080"
+
+secrets:
+  mysql_root_password:
+    external: true
+    file: ./db/mysql_root_password.txt
