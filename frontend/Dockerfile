@@ -11,12 +11,9 @@ COPY package-lock.json ${PROJECTDIR}
 
 RUN npm install @angular/cli
 RUN npm install
-#RUN npm run build --prod
+
 COPY . ${PROJECTDIR}
 
 EXPOSE 4200
 
-CMD [ "ng", "serve" ]
-
-#FROM docker.io/library/nginx
-#COPY --from=angular /app/dist/frontend/browser /usr/share/nginx/html
+CMD ng serve --host 0.0.0.0

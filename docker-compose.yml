@@ -5,4 +5,4 @@ services:
     ports: "8080:8080"
   frontend:
     build: ./frontend
-    ports: "8081:4200"
+    ports: "4200:4200"
