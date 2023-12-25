@@ -14,7 +14,10 @@ services:
       - db
   backend:
     build: ./backend
+    environment:
+      - DB_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
     ports: "8080:8080"
+    restart: on-failure
     depends_on:
       - db
   frontend:
