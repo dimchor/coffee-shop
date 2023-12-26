@@ -1,4 +1,4 @@
-package main
+package product
 
 type cup_size int
 
@@ -9,6 +9,6 @@ const (
 )
 
 type Cup struct {
-	Product `json:"product"`
-	Size    cup_size `json:"size"`
+	ProductBase `json:"product"`
+	Size        cup_size `json:"size"`
 }
