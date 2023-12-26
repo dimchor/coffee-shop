@@ -4,10 +4,11 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
-  	"gorm.io/driver/mysql"
 )
 
 func ping(c *gin.Context) {
@@ -15,14 +16,48 @@ func ping(c *gin.Context) {
 }
 
 // for testing purposes
+type Tabler interface {
+	TableName() string
+}
+
 type Help struct {
-	gorm.Model
-	Help_topic_id uint
-	Name string
-	Help_category_id uint
-	Description string
-	Example string
-	Url string
+	HelpTopicId    uint   `gorm:"primaryKey"`
+	Name           string `gorm:"size:64"`
+	HelpCategoryId uint
+	Description    string
+	Example        string
+	Url            string
+}
+
+func (Help) TableName() string {
+	return "help_topic"
+}
+
+// ...
+
+type WaitOptions struct {
+	Interval    uint
+	StartPeriod uint
+	Retries     uint
+}
+
+func try_opening(dsn string, config *gorm.Config,
+	options WaitOptions) (db *gorm.DB, err error) {
+
+	fmt.Printf("Waiting for %d seconds...\n", options.StartPeriod)
+	time.Sleep(time.Duration(options.StartPeriod) * time.Second)
+	for ; options.Retries > 0; options.Retries-- {
+		db, err = gorm.Open(mysql.Open(dsn), config)
+		if err == nil {
+			fmt.Printf("Connected to database successfully!\n")
+			return
+		}
+		fmt.Printf("Failed to connect to database. Retring in %d seconds...\n",
+			options.Interval)
+		time.Sleep(time.Duration(options.Interval) * time.Second)
+	}
+	fmt.Printf("Failed to connect to database. Aborting....\n")
+	return
 }
 
 func main() {
@@ -31,17 +66,18 @@ func main() {
 	//fmt.Println(cup)
 
 	password := os.Getenv("DB_ROOT_PASSWORD")
-	database_name := "mysql"
+	const database_name = "mysql"
 	dsn := "root:" + password + "@tcp(db:3306)/" +
 		database_name + "?charset=utf8mb4&parseTime=True&loc=Local"
-	database, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
+
+	db, err := try_opening(dsn, &gorm.Config{}, WaitOptions{30, 30, 5})
 	if err != nil {
-		fmt.Println("Coudln't connect to database!")
+		fmt.Fprintf(os.Stderr, "Database connection error: %s", err.Error())
 		return
 	}
 
 	var help Help
-	database.First(&help)
+	db.First(&help)
 	fmt.Println(help.Description)
 
 	productController := NewProductController()
