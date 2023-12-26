@@ -1,6 +1,7 @@
 package main
 
 import (
+	"coffee_shop_backend/controller"
 	"fmt"
 	"net/http"
 	"os"
@@ -80,17 +81,17 @@ func main() {
 	db.First(&help)
 	fmt.Println(help.Description)
 
-	productController := NewProductController()
+	productController := controller.NewProductController()
 
 	r := gin.Default()
 	r.GET("/ping", ping)
 
-	r.GET("/getcoffeebeans", productController.GetCoffeeBeans)
-	r.GET("/getcoffeebean/:id", productController.GetCoffeeBeansById)
-	r.POST("/postcoffeebeans", productController.PostCoffeeBeans)
+	r.GET("/v1/get/beans", productController.GetCoffeeBeans)
+	r.GET("/v1/get/bean/:id", productController.GetCoffeeBeansById)
+	r.POST("/v1/post/bean", productController.PostCoffeeBeans)
 
-	r.GET("/getcups", productController.GetCups)
-	r.GET("/getcup/:id", productController.GetCupsById)
-	r.POST("/postcup", productController.PostCup)
+	r.GET("/v1/get/cups", productController.GetCups)
+	r.GET("/v1/get/cup/:id", productController.GetCupsById)
+	r.POST("/v1/post/cup", productController.PostCup)
 	r.Run()
 }

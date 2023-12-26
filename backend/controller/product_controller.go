@@ -1,6 +1,7 @@
-package main
+package controller
 
 import (
+	"coffee_shop_backend/product"
 	"net/http"
 	"strconv"
 
@@ -9,34 +10,34 @@ import (
 
 type ProductController struct {
 	// temporary, GORM will be used in the (near) future
-	coffeebeans []CoffeeBean
-	cups        []Cup
+	coffeebeans []product.CoffeeBean
+	cups        []product.Cup
 }
 
 func NewProductController() *ProductController {
 	newProductController := &ProductController{
-		coffeebeans: [](CoffeeBean){
-			CoffeeBean{
-				Product{1, "Colombia Las Flores", 9.8},
+		coffeebeans: [](product.CoffeeBean){
+			product.CoffeeBean{
+				product.ProductBase{1, "Colombia Las Flores", 9.8},
 				"Arabica Red Bourbon",
 				"Acevedo, Huila",
 				200},
-			CoffeeBean{
-				Product{2, "Brazil Alta Mogiana", 6.8},
+			product.CoffeeBean{
+				product.ProductBase{2, "Brazil Alta Mogiana", 6.8},
 				"Arabica Catuai, Mundo novo, Acaia",
 				"Alta Mogiana, São Paulo",
 				200},
 		},
-		cups: [](Cup){
-			Cup{
-				Product{1, "Small cup", 1.5},
-				SMALL},
-			Cup{
-				Product{2, "Medium cup", 2.5},
-				MEDIUM},
-			Cup{
-				Product{3, "Large cup", 3.5},
-				LARGE},
+		cups: [](product.Cup){
+			product.Cup{
+				product.ProductBase{1, "Small cup", 1.5},
+				product.SMALL},
+			product.Cup{
+				product.ProductBase{2, "Medium cup", 2.5},
+				product.MEDIUM},
+			product.Cup{
+				product.ProductBase{3, "Large cup", 3.5},
+				product.LARGE},
 		},
 	}
 	return newProductController
@@ -87,7 +88,7 @@ func (p *ProductController) GetCupsById(c *gin.Context) {
 }
 
 func (p *ProductController) PostCoffeeBeans(c *gin.Context) {
-	var coffeeBean CoffeeBean
+	var coffeeBean product.CoffeeBean
 
 	if err := c.BindJSON(&coffeeBean); err != nil {
 		// TODO: find a proper return code for failure to bind JSON
@@ -109,7 +110,7 @@ func (p *ProductController) PostCoffeeBeans(c *gin.Context) {
 }
 
 func (p *ProductController) PostCup(c *gin.Context) {
-	var cup Cup
+	var cup product.Cup
 
 	if err := c.BindJSON(&cup); err != nil {
 		// TODO: find a proper return code for failure to bind JSON

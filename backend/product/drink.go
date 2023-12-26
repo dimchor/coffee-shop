@@ -1,7 +1,7 @@
-package main
+package product
 
 type CoffeeDrink struct {
-	Product
+	ProductBase
 	CoffeeBean
 	Iced bool
 }
