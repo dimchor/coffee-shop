@@ -1,7 +1,7 @@
 package product
 
 type CoffeeDrink struct {
-	ProductBase
-	CoffeeBean
-	Iced bool
+	ProductBase `json:"product"`
+	CoffeeBean  `json:"bean"`
+	Iced        bool `json:"iced"`
 }
