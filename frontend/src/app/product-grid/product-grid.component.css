@@ -17,10 +17,11 @@ body {
 }
 
 .container {
-    max-width: 1270px;
-    margin-left: 22%;
-    margin-right: 0px;
+    margin-left: 5%;
+    margin-right: 5%;
     padding: 0 1rem;
+
+    background-color: antiquewhite;
 }
 
 .title {
@@ -69,7 +70,6 @@ body {
 }
 
 .product-item {
-    width: calc(20% - 16px);
     margin: 8px;
     background-color: #fff;
     max-width: 300px;

@@ -1,0 +1,21 @@
+* {
+    padding: 2%;
+    margin: 2%;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #fef4f4;
+}
+
+.content {
+    overflow-x: hidden;
+}
+
+.card {
+    min-height: 100%;
+    margin-left: 5%;
+    margin-right: 0%;
+    margin-bottom: 0%;
+    padding: 0 1rem;
+}

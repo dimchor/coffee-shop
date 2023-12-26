@@ -19,14 +19,43 @@ export class ProductsPageComponent {
   }
 
   productList = [
-    new ProductComponent('Java gia olous', '22.80', "../assets/java-logo.jpg"),
-    new ProductComponent('Java gia ligous', '47.50', "../assets/java-logo.jpg"),
-    new ProductComponent('Java gia kanenan', '89.20', "../assets/java-logo.jpg"),
-    new ProductComponent('See ', '0.99', "../assets/C_Logo.png"),
-    new ProductComponent('See sharp', '14.70', "../assets/C_Logo.png"),
-    new ProductComponent('See plus plus', '185.00', "../assets/C_Logo.png"),
-    new ProductComponent('Bython', '89.20', "../assets/java-logo.jpg")
+    new ProductComponent('Java gia olous', '22.80', "Blends", "../assets/java-logo.jpg"),
+    new ProductComponent('Java gia ligous', '47.50', "Blends", "../assets/java-logo.jpg"),
+    new ProductComponent('Java gia kanenan', '89.20', "Blends", "../assets/java-logo.jpg"),
+    new ProductComponent('See ', '0.99', "Tea", "../assets/C_Logo.png"),
+    new ProductComponent('See sharp', '14.70', "Tea", "../assets/C_Logo.png"),
+    new ProductComponent('See plus plus', '185.00', "Tea", "../assets/C_Logo.png"),
+    new ProductComponent('Bython', '89.20', "Utilities", "../assets/java-logo.jpg"),
+
+
+    new ProductComponent('Java gia olous', '22.80', "Blends", "../assets/java-logo.jpg"),
+    new ProductComponent('Java gia ligous', '47.50', "Blends", "../assets/java-logo.jpg"),
+    new ProductComponent('Java gia kanenan', '89.20', "Blends", "../assets/java-logo.jpg"),
+    new ProductComponent('See ', '0.99', "Tea", "../assets/C_Logo.png"),
+    new ProductComponent('See sharp', '14.70', "Tea", "../assets/C_Logo.png"),
+    new ProductComponent('See plus plus', '185.00', "Tea", "../assets/C_Logo.png"),
+    new ProductComponent('Bython', '89.20', "Utilities", "../assets/java-logo.jpg"), new ProductComponent('Java gia olous', '22.80', "Blends", "../assets/java-logo.jpg"),
+    new ProductComponent('Java gia ligous', '47.50', "Blends", "../assets/java-logo.jpg"),
+    new ProductComponent('Java gia kanenan', '89.20', "Blends", "../assets/java-logo.jpg"),
+    new ProductComponent('See ', '0.99', "Tea", "../assets/C_Logo.png"),
+    new ProductComponent('See sharp', '14.70', "Tea", "../assets/C_Logo.png"),
+    new ProductComponent('See plus plus', '185.00', "Tea", "../assets/C_Logo.png"),
+    new ProductComponent('Bython', '89.20', "Utilities", "../assets/java-logo.jpg"), new ProductComponent('Java gia olous', '22.80', "Blends", "../assets/java-logo.jpg"),
+    new ProductComponent('Java gia ligous', '47.50', "Blends", "../assets/java-logo.jpg"),
+    new ProductComponent('Java gia kanenan', '89.20', "Blends", "../assets/java-logo.jpg"),
+    new ProductComponent('See ', '0.99', "Tea", "../assets/C_Logo.png"),
+    new ProductComponent('See sharp', '14.70', "Tea", "../assets/C_Logo.png"),
+    new ProductComponent('See plus plus', '185.00', "Tea", "../assets/C_Logo.png"),
+    new ProductComponent('Bython', '89.20', "Utilities", "../assets/java-logo.jpg"), new ProductComponent('Java gia olous', '22.80', "Blends", "../assets/java-logo.jpg"),
+    new ProductComponent('Java gia ligous', '47.50', "Blends", "../assets/java-logo.jpg"),
+    new ProductComponent('Java gia kanenan', '89.20', "Blends", "../assets/java-logo.jpg"),
+    new ProductComponent('See ', '0.99', "Tea", "../assets/C_Logo.png"),
+    new ProductComponent('See sharp', '14.70', "Tea", "../assets/C_Logo.png"),
+    new ProductComponent('See plus plus', '185.00', "Tea", "../assets/C_Logo.png"),
+    new ProductComponent('Bython', '89.20', "Utilities", "../assets/java-logo.jpg"),
+
   ]
+  tags = ["Blends", "Tea", "Utilities"]
 
   filteredList = this.productList
 }

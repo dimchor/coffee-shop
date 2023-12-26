@@ -16,33 +16,81 @@ import { Output } from '@angular/core';
 export class ProductFiltersComponent {
 
     @Input() list: any[] = [];
+    @Input() tags: string[] = []
     @Output() msg = new EventEmitter();
+
+    res: ProductComponent[] = this.list
+
+    searchText = "";
+    selected_tag = "";
+    radio = false;
 
     filteredArr(list: ProductComponent[], arg1: string) {
         this.res = []
         if (!this.list) {
             return [];
         }
+
         if (!arg1) {
-            return this.list;
+            if (this.radio == true) {
+                this.list.forEach((p, index) => {
+
+                    if (p.pTag === this.selected_tag) {
+                        this.res.push(p)
+                    }
+                });
+            }
+            else {
+                this.list.forEach((p, index) => {
+                    this.res.push(p)
+                });
+            }
+            this.msg.emit(this.res)
+            return this.res;
         }
 
-        let i: string
-        this.list.forEach((p, index) => {
+        let i, j: string
+        if (this.radio == false) {
+            this.list.forEach((p, index) => {
 
-            i = p.pName.toLocaleLowerCase();
+                i = p.pName.toLocaleLowerCase();
 
-            if (i.includes(arg1)) {
-                this.res.push(p)
-            }
-        });
-        alert("pass");
+                if (i.includes(arg1)) {
+                    this.res.push(p)
+                }
+            });
+        }
+        else {
+
+            this.list.forEach((p, index) => {
+
+                i = p.pName.toLocaleLowerCase();
+                j = p.pTag;
+
+                if (i.includes(arg1) && j === this.selected_tag) {
+                    this.res.push(p)
+                }
+
+            });
+        }
         this.msg.emit(this.res)
         return this.res;
     }
 
-    res: ProductComponent[] = this.list
-    searchText = "";
+    select_tag() {
+        this.selected_tag = this.selected_tag;
+        this.radio = true;
+    }
 
+    clear_filters() {
+        this.searchText = "";
+        this.selected_tag = "";
+        this.radio = false;
 
+        this.res = []
+        this.list.forEach((p, index) => {
+            this.res.push(p)
+        });
+        this.msg.emit(this.res)
+    }
 }
