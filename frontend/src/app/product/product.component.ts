@@ -1,6 +1,6 @@
 
 export class ProductComponent {
-  constructor(public pName : string, public pPrice : string, public pImagePath: string) {
-    
+  constructor(public pName: string, public pPrice: string, public pTag: string, public pImagePath: string) {
+
   }
 }

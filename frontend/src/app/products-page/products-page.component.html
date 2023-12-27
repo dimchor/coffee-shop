@@ -1,0 +1,8 @@
+<app-navbar></app-navbar>
+<div class="b">
+    <div id="container">
+        <app-product-filters id="left" (msg)="receiveMSG($event)" [list]="productList"
+            [tags]="tags"></app-product-filters>
+        <app-product-grid id="middle" [list]="productList" [filteredList]="filteredList"></app-product-grid>
+    </div>
+</div>

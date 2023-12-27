@@ -1,0 +1,26 @@
+<!-- <p>product-filters works!</p>
+<div class="wrapper">
+    <div class="container">
+        <input type="text" class="form" ngModel="searchText" placeholder="..." >
+        <button class="primary" type="button" >Search</button>
+    </div>
+</div> -->
+
+<div class="content" role="main">
+    <div class="card">
+        <div class="form-group">
+            <input type="text" #searchBar [(ngModel)]="searchText" name="searchBar" placeholder="Enter text to search">
+            <button (click)="filteredArr(res, searchText)" for="searchBar">Search</button>
+        </div>
+        <div>
+            <div *ngFor="let tag of tags">
+                <label for="{{tag}}">
+                    <input id="{{tag}}" [value]='tag' defaultChecked type="radio" (input)="select_tag()" name="tags"
+                        [(ngModel)]="selected_tag">
+                    {{tag}}
+                </label>
+            </div>
+        </div>
+        <button (click)="clear_filters()">Clear Filters</button>
+    </div>
+</div>

@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, SimpleChanges, OnChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProductComponent } from '../product/product.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-product-grid',
@@ -9,11 +10,14 @@ import { ProductComponent } from '../product/product.component';
   templateUrl: './product-grid.component.html',
   styleUrl: './product-grid.component.css'
 })
-export class ProductGridComponent {
-  productList = [
-    new ProductComponent('Java gia olous', '22.80', "../assets/java-logo.jpg"),
-    new ProductComponent('Java gia ligous', '47.50', "../assets/java-logo.jpg"),
-    new ProductComponent('Java gia kanenan', '89.20', "../assets/java-logo.jpg")
-  ]
+export class ProductGridComponent implements OnChanges {
+  private router: Router = new Router;
+  ngOnChanges(changes: SimpleChanges): void {
+    this.router.navigateByUrl('/products')
+  }
+
+  @Input() list: ProductComponent[] = [];
+  @Input() filteredList: ProductComponent[] = [];
+
 
 }
