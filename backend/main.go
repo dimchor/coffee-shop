@@ -74,24 +74,27 @@ func main() {
 
 	db, err := try_opening(dsn, &gorm.Config{}, WaitOptions{30, 30, 5})
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Database connection error: %s", err.Error())
+		fmt.Printf("Database connection error: %s\n", err.Error())
 		return
 	}
 
-	productService := service.NewProductService(db)
+	productService, err := service.NewProductService(db)
+	if err != nil {
+		fmt.Printf("Product service error: %s\n", err.Error())
+	}
 
-	var productController controller.IProductController
-	productController = controller.NewProductController(productService)
+	var productController controller.IProductController = controller.
+		NewProductController(productService)
 
 	r := gin.Default()
 	r.GET("/ping", ping)
 
 	r.GET("/v1/get/beans", productController.GetCoffeeBeans)
-	r.GET("/v1/get/bean/:id", productController.GetCoffeeBeansById)
-	r.POST("/v1/post/bean", productController.PostCoffeeBeans)
+	r.GET("/v1/get/bean/:id", productController.GetCoffeeBeanById)
+	r.POST("/v1/post/bean", productController.PostCoffeeBean)
 
 	r.GET("/v1/get/cups", productController.GetCups)
-	r.GET("/v1/get/cup/:id", productController.GetCupsById)
+	r.GET("/v1/get/cup/:id", productController.GetCupById)
 	r.POST("/v1/post/cup", productController.PostCup)
 	r.Run()
 }

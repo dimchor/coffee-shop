@@ -1,3 +1,3 @@
-curl -X POST  -H "Accept: Application/json" -H "Content-Type: application/json" http://127.1:8080/postcoffeebeans -d '{"product":{"id":3, "name":"Filter with Rum flavour","price":4.43},"species":"80% Arabica 20% Robusta","area":"","weight":200}'
+curl -X POST  -H "Accept: Application/json" -H "Content-Type: application/json" http://127.1:8080/v1/post/bean -d '{"product":{"id":3, "name":"Filter with Rum flavour","price":4.43},"species":"80% Arabica 20% Robusta","area":"","weight":200}'
 
-curl -X POST  -H "Accept: Application/json" -H "Content-Type: application/json" http://127.1:8080/postcup -d '{"product":{"id":4, "name":"Large cup XMAS Edition", "price":3.5}, "size":2}'
+curl -X POST  -H "Accept: Application/json" -H "Content-Type: application/json" http://127.1:8080/v1/post/cup -d '{"product":{"id":4, "name":"Large cup XMAS Edition", "price":3.5}, "size":2}'

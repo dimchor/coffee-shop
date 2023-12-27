@@ -4,6 +4,7 @@ import (
 	"coffee_shop_backend/product"
 	"coffee_shop_backend/service"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -49,108 +50,143 @@ func NewProductController(productService service.IProductService) *ProductContro
 }
 
 func (p *ProductController) GetCoffeeBeans(c *gin.Context) {
-	//c.JSON(http.StatusOK, p.coffeebeans)
-}
-
-func (p *ProductController) GetCups(c *gin.Context) {
-	//c.JSON(http.StatusOK, p.cups)
-}
-
-func (p *ProductController) GetCoffeeBeansById(c *gin.Context) {
-	/*
-		id, err := strconv.ParseUint(c.Param("id"), 10, 64)
-		if err != nil {
-			// TODO: return appropriate code for invalid input
-			return
-		}
-	*/
-
-	// TODO: To be replaced by gorm call
-	/*
-		for _, item := range p.coffeebeans {
-			if item.Id == id {
-				c.JSON(http.StatusOK, item)
-				return
-			}
-		}
-	*/
-
-	c.JSON(http.StatusNotFound, gin.H{"message": "coffee beans not found"})
-}
-
-func (p *ProductController) GetCupsById(c *gin.Context) {
-	/*
-		id, err := strconv.ParseUint(c.Param("id"), 10, 64)
-		if err != nil {
-			// TODO: return appropriate code for invalid input
-			return
-		}
-	*/
-
-	// TODO: To be replaced by gorm call
-	/*
-		for _, item := range p.cups {
-			if item.Id == id {
-				c.JSON(http.StatusOK, item)
-				return
-			}
-		}
-	*/
-	c.JSON(http.StatusNotFound, gin.H{"message": "cup not found"})
-}
-
-func (p *ProductController) PostCoffeeBeans(c *gin.Context) {
-	var coffeeBean product.CoffeeBean
-
-	if err := c.BindJSON(&coffeeBean); err != nil {
-		// TODO: find a proper return code for failure to bind JSON
+	result, err := p.productService.GetCoffeeBeans()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return
 	}
 
-	// TODO: To be replaced by gorm call
-	/*
-		for _, item := range p.coffeebeans {
-			if item.Id == coffeeBean.Id {
-				// TODO: find a proper return code for same id
-				return
-			}
-		}
-	*/
-	// perform other checks here, if needed
+	c.JSON(http.StatusOK, result)
+}
 
-	// p.coffeebeans = append(p.coffeebeans, coffeeBean)
+func (p *ProductController) GetCoffeeBeanById(c *gin.Context) {
+
+	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+		return
+	}
+
+	result, err := p.productService.GetCoffeeBeanById(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
+		return
+	}
+	if result != nil {
+		c.JSON(http.StatusOK, result)
+		return
+	}
+
+	c.JSON(http.StatusNotFound, gin.H{"message": "coffee bean not found"})
+}
+
+func (p *ProductController) PostCoffeeBean(c *gin.Context) {
+	var coffeeBean product.CoffeeBean
+
+	if err := c.BindJSON(&coffeeBean); err != nil {
+		// status code 400 should be ok
+		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+		return
+	}
+
+	if err := p.productService.PostCoffeeBean(&coffeeBean); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
+		return
+	}
+
 	c.JSON(http.StatusCreated, coffeeBean)
+}
+
+func (p *ProductController) GetCups(c *gin.Context) {
+	result, err := p.productService.GetCups()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, result)
+}
+
+func (p *ProductController) GetCupById(c *gin.Context) {
+	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+		return
+	}
+
+	result, err := p.productService.GetCupById(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
+		return
+	}
+	if result != nil {
+		c.JSON(http.StatusOK, result)
+		return
+	}
+
+	c.JSON(http.StatusNotFound, gin.H{"message": "cup not found"})
 }
 
 func (p *ProductController) PostCup(c *gin.Context) {
 	var cup product.Cup
 
 	if err := c.BindJSON(&cup); err != nil {
-		// TODO: find a proper return code for failure to bind JSON
+		// status code 400 should be ok
+		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
 
-	// TODO: To be replaced by gorm call
-	/*
-		for _, item := range p.cups {
-			if item.Id == cup.Id {
-				// TODO: find a proper return code for same id
-				return
-			}
-		}
-	*/
-	// perform other checks here, if needed
+	if err := p.productService.PostCup(&cup); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
+		return
+	}
 
-	//p.cups = append(p.cups, cup)
 	c.JSON(http.StatusCreated, cup)
 }
 
-func (p *ProductController) GetCoffeeDrink(c *gin.Context) {
+func (p *ProductController) GetCoffeeDrinks(c *gin.Context) {
+	result, err := p.productService.GetCoffeeDrinks()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
+		return
+	}
 
+	c.JSON(http.StatusOK, result)
 }
+
 func (p *ProductController) GetCoffeeDrinkById(c *gin.Context) {
+	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+		return
+	}
 
+	result, err := p.productService.GetCoffeeDrinkById(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
+		return
+	}
+	if result != nil {
+		c.JSON(http.StatusOK, result)
+		return
+	}
+
+	c.JSON(http.StatusNotFound, gin.H{"message": "drink not found"})
 }
-func (p *ProductController) PostCoffeeDrink(c *gin.Context) {
 
+func (p *ProductController) PostCoffeeDrink(c *gin.Context) {
+	var drink product.CoffeeDrink
+
+	if err := c.BindJSON(&drink); err != nil {
+		// status code 400 should be ok
+		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+		return
+	}
+
+	if err := p.productService.PostCoffeeDrink(&drink); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusCreated, drink)
 }

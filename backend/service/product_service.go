@@ -10,37 +10,74 @@ type ProductService struct {
 	db *gorm.DB
 }
 
-func NewProductService(db *gorm.DB) *ProductService {
-	db.AutoMigrate(&product.CoffeeBean{})
-	db.AutoMigrate(&product.CoffeeDrink{})
-	db.AutoMigrate(&product.Cup{})
-	return &ProductService{db}
+func NewProductService(db *gorm.DB) (*ProductService, error) {
+	err := db.AutoMigrate(&product.CoffeeBean{})
+	if err != nil {
+		return nil, err
+	}
+
+	err = db.AutoMigrate(&product.CoffeeDrink{})
+	if err != nil {
+		return nil, err
+	}
+
+	err = db.AutoMigrate(&product.Cup{})
+	if err != nil {
+		return nil, err
+	}
+
+	return &ProductService{db}, nil
 }
 
-func (*ProductService) GetCoffeeBeans() {
-
+func (p *ProductService) GetCoffeeBeans() ([]product.CoffeeBean, error) {
+	var beans []product.CoffeeBean
+	result := p.db.Find(&beans)
+	return beans, result.Error
 }
-func (*ProductService) GetCoffeeBeansById() {
 
+func (p *ProductService) GetCoffeeBeanById(id uint64) (
+	*product.CoffeeBean, error) {
+	var bean product.CoffeeBean
+	result := p.db.First(&bean, id)
+	return &bean, result.Error
 }
-func (*ProductService) PostCoffeeBeans() {
 
+func (p *ProductService) PostCoffeeBean(bean *product.CoffeeBean) error {
+	result := p.db.Create(bean)
+	return result.Error
 }
-func (*ProductService) GetCups() {
 
+func (p *ProductService) GetCups() ([]product.Cup, error) {
+	var cups []product.Cup
+	result := p.db.Find(&cups)
+	return cups, result.Error
 }
-func (*ProductService) GetCupsById() {
 
+func (p *ProductService) GetCupById(id uint64) (*product.Cup, error) {
+	var cup product.Cup
+	result := p.db.First(&cup, id)
+	return &cup, result.Error
 }
-func (*ProductService) PostCup() {
 
+func (p *ProductService) PostCup(cup *product.Cup) error {
+	result := p.db.Create(cup)
+	return result.Error
 }
-func (*ProductService) GetCoffeeDrink() {
 
+func (p *ProductService) GetCoffeeDrinks() ([]product.CoffeeDrink, error) {
+	var drinks []product.CoffeeDrink
+	result := p.db.Find(&drinks)
+	return drinks, result.Error
 }
-func (*ProductService) GetCoffeeDrinkById() {
 
+func (p *ProductService) GetCoffeeDrinkById(id uint64) (
+	*product.CoffeeDrink, error) {
+	var drink product.CoffeeDrink
+	result := p.db.First(&drink, id)
+	return &drink, result.Error
 }
-func (*ProductService) PostCoffeeDrink() {
 
+func (p *ProductService) PostCoffeeDrink(drink *product.CoffeeDrink) error {
+	result := p.db.Create(drink)
+	return result.Error
 }
