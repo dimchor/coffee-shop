@@ -2,6 +2,7 @@ package main
 
 import (
 	"coffee_shop_backend/controller"
+	"coffee_shop_backend/service"
 	"fmt"
 	"net/http"
 	"os"
@@ -67,7 +68,7 @@ func main() {
 	//fmt.Println(cup)
 
 	password := os.Getenv("DB_ROOT_PASSWORD")
-	const database_name = "mysql"
+	const database_name = "coffeeshop"
 	dsn := "root:" + password + "@tcp(db:3306)/" +
 		database_name + "?charset=utf8mb4&parseTime=True&loc=Local"
 
@@ -77,11 +78,10 @@ func main() {
 		return
 	}
 
-	var help Help
-	db.First(&help)
-	fmt.Println(help.Description)
+	productService := service.NewProductService(db)
 
-	productController := controller.ProductController{}
+	var productController controller.IProductController
+	productController = controller.NewProductController(productService)
 
 	r := gin.Default()
 	r.GET("/ping", ping)

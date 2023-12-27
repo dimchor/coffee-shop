@@ -6,6 +6,7 @@ services:
       - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
     volumes:
       - ./db/mysql:/var/lib/mysql
+      - ./db/dumps:/docker-entrypoint-initdb.d
     restart: always
   adminer:
     image: docker.io/library/adminer:latest

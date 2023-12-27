@@ -14,10 +14,10 @@ type ProductController struct {
 		coffeebeans []product.CoffeeBean
 		cups        []product.Cup
 	*/
-	productService *service.IProductService
+	productService service.IProductService
 }
 
-func NewProductController(productService *service.IProductService) *ProductController {
+func NewProductController(productService service.IProductService) *ProductController {
 	/*
 		newProductController := &ProductController{
 			coffeebeans: [](product.CoffeeBean){
@@ -143,4 +143,14 @@ func (p *ProductController) PostCup(c *gin.Context) {
 
 	//p.cups = append(p.cups, cup)
 	c.JSON(http.StatusCreated, cup)
+}
+
+func (p *ProductController) GetCoffeeDrink(c *gin.Context) {
+
+}
+func (p *ProductController) GetCoffeeDrinkById(c *gin.Context) {
+
+}
+func (p *ProductController) PostCoffeeDrink(c *gin.Context) {
+
 }
