@@ -81,7 +81,7 @@ func main() {
 	db.First(&help)
 	fmt.Println(help.Description)
 
-	productController := controller.NewProductController()
+	productController := controller.ProductController{}
 
 	r := gin.Default()
 	r.GET("/ping", ping)
