@@ -3,13 +3,13 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-login',
+  selector: 'app-register',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './login.component.html',
-  styleUrl: './login.component.css'
+  templateUrl: './register.component.html',
+  styleUrl: './register.component.css'
 })
-export class LoginComponent {
+export class RegisterComponent {
 
   username = ""
   password = ""
@@ -21,16 +21,14 @@ export class LoginComponent {
 
   session: any;
 
-  login(user: string, pass: string) {
+  register(user: string, pass: string) {
 
     alert(user + pass)
     //CALL API
     //this.session =
-    if (true) {
-      localStorage.setItem('session', JSON.stringify(this.session))
-    }
-    return this.user;
+
   }
+
 
 
 }

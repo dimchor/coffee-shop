@@ -6,8 +6,18 @@
         <a id="a4" class="hover" href="">Cart</a>
     </ul>
 </div> -->
+<nav class="navbar" *ngIf="session">
+    <ul class="navbar-links">
+        <a routerLink="/homepage" routerLinkActive="active-link">Home</a>
+        <a routerLink="/products" routerLinkActive="active-link">Products</a>
+        <a routerLink="/account" routerLinkActive="active-link">Account</a>
+        <a routerLink="/" (click)="logout()" routerLinkActive="active-link">Logout</a>
+        <a routerLink="/homepage" routerLinkActive="active-link">About</a>
+    </ul>
+</nav>
 
-<nav class="navbar">
+
+<nav class="navbar" *ngIf="!session">
     <ul class="navbar-links">
         <a routerLink="/homepage" routerLinkActive="active-link">Home</a>
         <a routerLink="/products" routerLinkActive="active-link">Products</a>

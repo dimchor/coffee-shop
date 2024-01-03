@@ -8,7 +8,6 @@ import { AuthService } from './auth.service';
 export class AuthGuardService {
   constructor(public auth: AuthService, public router: Router) { }
   canActivate(): boolean {
-    alert("ala")
     if (!this.auth.isAuthenticated()) {
       //this.router.navigate(['login']);
 

@@ -11,4 +11,11 @@ import { RouterModule } from '@angular/router';
 })
 export class NavbarComponent {
   @Input() currentTab = ""
+
+
+  session = localStorage.getItem('session');
+
+  logout() {
+    localStorage.removeItem('session');
+  }
 }
