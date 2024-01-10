@@ -2,6 +2,7 @@ package main
 
 import (
 	"coffee_shop_backend/controller"
+	"coffee_shop_backend/service"
 	"fmt"
 	"net/http"
 	"os"
@@ -67,31 +68,30 @@ func main() {
 	//fmt.Println(cup)
 
 	password := os.Getenv("DB_ROOT_PASSWORD")
-	const database_name = "mysql"
+	const database_name = "coffeeshop"
 	dsn := "root:" + password + "@tcp(db:3306)/" +
 		database_name + "?charset=utf8mb4&parseTime=True&loc=Local"
 
 	db, err := try_opening(dsn, &gorm.Config{}, WaitOptions{30, 30, 5})
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Database connection error: %s", err.Error())
+		fmt.Printf("Database connection error: %s\n", err.Error())
 		return
 	}
 
-	var help Help
-	db.First(&help)
-	fmt.Println(help.Description)
+	productService, err := service.NewProductService(db)
+	if err != nil {
+		fmt.Printf("Product service error: %s\n", err.Error())
+	}
 
-	productController := controller.ProductController{}
+	var productController controller.IProductController = controller.
+		NewProductController(productService)
 
 	r := gin.Default()
 	r.GET("/ping", ping)
 
-	r.GET("/v1/get/beans", productController.GetCoffeeBeans)
-	r.GET("/v1/get/bean/:id", productController.GetCoffeeBeansById)
-	r.POST("/v1/post/bean", productController.PostCoffeeBeans)
+	r.GET("/v1/get/productss", productController.GetProducts)
+	r.GET("/v1/get/product/:id", productController.GetProductById)
+	r.POST("/v1/post/product", productController.PostProduct)
 
-	r.GET("/v1/get/cups", productController.GetCups)
-	r.GET("/v1/get/cup/:id", productController.GetCupsById)
-	r.POST("/v1/post/cup", productController.PostCup)
 	r.Run()
 }

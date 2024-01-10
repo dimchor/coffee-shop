@@ -1,9 +1,10 @@
 package controller
 
 import (
-	"coffee_shop_backend/product"
 	"coffee_shop_backend/service"
+	"coffee_shop_backend/types"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -14,10 +15,10 @@ type ProductController struct {
 		coffeebeans []product.CoffeeBean
 		cups        []product.Cup
 	*/
-	productService *service.IProductService
+	productService service.IProductService
 }
 
-func NewProductController(productService *service.IProductService) *ProductController {
+func NewProductController(productService service.IProductService) *ProductController {
 	/*
 		newProductController := &ProductController{
 			coffeebeans: [](product.CoffeeBean){
@@ -48,99 +49,50 @@ func NewProductController(productService *service.IProductService) *ProductContr
 	return &ProductController{productService}
 }
 
-func (p *ProductController) GetCoffeeBeans(c *gin.Context) {
-	//c.JSON(http.StatusOK, p.coffeebeans)
-}
-
-func (p *ProductController) GetCups(c *gin.Context) {
-	//c.JSON(http.StatusOK, p.cups)
-}
-
-func (p *ProductController) GetCoffeeBeansById(c *gin.Context) {
-	/*
-		id, err := strconv.ParseUint(c.Param("id"), 10, 64)
-		if err != nil {
-			// TODO: return appropriate code for invalid input
-			return
-		}
-	*/
-
-	// TODO: To be replaced by gorm call
-	/*
-		for _, item := range p.coffeebeans {
-			if item.Id == id {
-				c.JSON(http.StatusOK, item)
-				return
-			}
-		}
-	*/
-
-	c.JSON(http.StatusNotFound, gin.H{"message": "coffee beans not found"})
-}
-
-func (p *ProductController) GetCupsById(c *gin.Context) {
-	/*
-		id, err := strconv.ParseUint(c.Param("id"), 10, 64)
-		if err != nil {
-			// TODO: return appropriate code for invalid input
-			return
-		}
-	*/
-
-	// TODO: To be replaced by gorm call
-	/*
-		for _, item := range p.cups {
-			if item.Id == id {
-				c.JSON(http.StatusOK, item)
-				return
-			}
-		}
-	*/
-	c.JSON(http.StatusNotFound, gin.H{"message": "cup not found"})
-}
-
-func (p *ProductController) PostCoffeeBeans(c *gin.Context) {
-	var coffeeBean product.CoffeeBean
-
-	if err := c.BindJSON(&coffeeBean); err != nil {
-		// TODO: find a proper return code for failure to bind JSON
+func (p *ProductController) GetProducts(c *gin.Context) {
+	result, err := p.productService.GetProducts()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return
 	}
 
-	// TODO: To be replaced by gorm call
-	/*
-		for _, item := range p.coffeebeans {
-			if item.Id == coffeeBean.Id {
-				// TODO: find a proper return code for same id
-				return
-			}
-		}
-	*/
-	// perform other checks here, if needed
-
-	// p.coffeebeans = append(p.coffeebeans, coffeeBean)
-	c.JSON(http.StatusCreated, coffeeBean)
+	c.JSON(http.StatusOK, result)
 }
 
-func (p *ProductController) PostCup(c *gin.Context) {
-	var cup product.Cup
+func (p *ProductController) GetProductById(c *gin.Context) {
 
-	if err := c.BindJSON(&cup); err != nil {
-		// TODO: find a proper return code for failure to bind JSON
+	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
 
-	// TODO: To be replaced by gorm call
-	/*
-		for _, item := range p.cups {
-			if item.Id == cup.Id {
-				// TODO: find a proper return code for same id
-				return
-			}
-		}
-	*/
-	// perform other checks here, if needed
+	result, err := p.productService.GetProductById(id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
+		return
+	}
+	if result != nil {
+		c.JSON(http.StatusOK, result)
+		return
+	}
 
-	//p.cups = append(p.cups, cup)
-	c.JSON(http.StatusCreated, cup)
+	c.JSON(http.StatusNotFound, gin.H{"message": "coffee bean not found"})
+}
+
+func (p *ProductController) PostProduct(c *gin.Context) {
+	var product types.Product
+
+	if err := c.BindJSON(&product); err != nil {
+		// status code 400 should be ok
+		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+		return
+	}
+
+	if err := p.productService.PostProduct(&product); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusCreated, product)
 }
