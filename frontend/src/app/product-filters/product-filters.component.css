@@ -19,3 +19,11 @@ body {
     margin-bottom: 0%;
     padding: 0 1rem;
 }
+
+#radio {
+    cursor: pointer;
+}
+
+button {
+    cursor: pointer;
+}
