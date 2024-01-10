@@ -1,7 +1,7 @@
 package service
 
 import (
-	"coffee_shop_backend/product"
+	"coffee_shop_backend/types"
 
 	"gorm.io/gorm"
 )
@@ -11,17 +11,7 @@ type ProductService struct {
 }
 
 func NewProductService(db *gorm.DB) (*ProductService, error) {
-	err := db.AutoMigrate(&product.CoffeeBean{})
-	if err != nil {
-		return nil, err
-	}
-
-	err = db.AutoMigrate(&product.CoffeeDrink{})
-	if err != nil {
-		return nil, err
-	}
-
-	err = db.AutoMigrate(&product.Cup{})
+	err := db.AutoMigrate(&types.Product{})
 	if err != nil {
 		return nil, err
 	}
@@ -29,55 +19,19 @@ func NewProductService(db *gorm.DB) (*ProductService, error) {
 	return &ProductService{db}, nil
 }
 
-func (p *ProductService) GetCoffeeBeans() ([]product.CoffeeBean, error) {
-	var beans []product.CoffeeBean
-	result := p.db.Find(&beans)
-	return beans, result.Error
+func (p *ProductService) GetProducts() ([]types.Product, error) {
+	var products []types.Product
+	result := p.db.Find(&products)
+	return products, result.Error
 }
 
-func (p *ProductService) GetCoffeeBeanById(id uint64) (
-	*product.CoffeeBean, error) {
-	var bean product.CoffeeBean
-	result := p.db.First(&bean, id)
-	return &bean, result.Error
+func (p *ProductService) GetProductById(id uint64) (*types.Product, error) {
+	var product types.Product
+	result := p.db.First(&product, id)
+	return &product, result.Error
 }
 
-func (p *ProductService) PostCoffeeBean(bean *product.CoffeeBean) error {
-	result := p.db.Create(bean)
-	return result.Error
-}
-
-func (p *ProductService) GetCups() ([]product.Cup, error) {
-	var cups []product.Cup
-	result := p.db.Find(&cups)
-	return cups, result.Error
-}
-
-func (p *ProductService) GetCupById(id uint64) (*product.Cup, error) {
-	var cup product.Cup
-	result := p.db.First(&cup, id)
-	return &cup, result.Error
-}
-
-func (p *ProductService) PostCup(cup *product.Cup) error {
-	result := p.db.Create(cup)
-	return result.Error
-}
-
-func (p *ProductService) GetCoffeeDrinks() ([]product.CoffeeDrink, error) {
-	var drinks []product.CoffeeDrink
-	result := p.db.Find(&drinks)
-	return drinks, result.Error
-}
-
-func (p *ProductService) GetCoffeeDrinkById(id uint64) (
-	*product.CoffeeDrink, error) {
-	var drink product.CoffeeDrink
-	result := p.db.First(&drink, id)
-	return &drink, result.Error
-}
-
-func (p *ProductService) PostCoffeeDrink(drink *product.CoffeeDrink) error {
-	result := p.db.Create(drink)
+func (p *ProductService) PostProduct(product *types.Product) error {
+	result := p.db.Create(product)
 	return result.Error
 }
