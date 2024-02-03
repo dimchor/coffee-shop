@@ -10,11 +10,6 @@ import (
 )
 
 type ProductController struct {
-	// temporary, GORM will be used in the (near) future
-	/*
-		coffeebeans []product.CoffeeBean
-		cups        []product.Cup
-	*/
 	productService service.IProductService
 }
 
@@ -50,12 +45,16 @@ func NewProductController(productService service.IProductService) *ProductContro
 }
 
 func (p *ProductController) GetProducts(c *gin.Context) {
-	result, err := p.productService.GetProducts()
+	products, err := p.productService.GetProducts()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return
 	}
 
+	var result []types.ProductGetDto
+	for _, product := range products {
+		result = append(result, *product.ToProductGetDto())
+	}
 	c.JSON(http.StatusOK, result)
 }
 
@@ -73,23 +72,25 @@ func (p *ProductController) GetProductById(c *gin.Context) {
 		return
 	}
 	if result != nil {
-		c.JSON(http.StatusOK, result)
+		c.JSON(http.StatusOK, result.ToProductGetDto())
 		return
 	}
 
-	c.JSON(http.StatusNotFound, gin.H{"message": "coffee bean not found"})
+	c.JSON(http.StatusNotFound, gin.H{"message": "product not found"})
 }
 
 func (p *ProductController) PostProduct(c *gin.Context) {
-	var product types.Product
+	var productDto types.ProductPostDto
 
-	if err := c.BindJSON(&product); err != nil {
+	if err := c.BindJSON(&productDto); err != nil {
 		// status code 400 should be ok
 		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
 		return
 	}
 
-	if err := p.productService.PostProduct(&product); err != nil {
+	product := productDto.ToProduct()
+
+	if err := p.productService.PostProduct(product); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
 		return
 	}
