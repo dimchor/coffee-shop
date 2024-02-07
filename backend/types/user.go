@@ -45,3 +45,8 @@ func (u *User) ToDetailsDto() *UserDetailsDto {
 	return &UserDetailsDto{strconv.FormatUint(u.ID, 10), u.FirstName,
 		u.LastName, u.Address, u.AdminRights}
 }
+
+func (u *UserCreateDto) ToUser(salt string, hash string) *User {
+	return &User{Base{}, u.Username, u.FirstName, u.LastName, u.Address, salt,
+		hash, u.AdminRights}
+}

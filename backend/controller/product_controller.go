@@ -97,3 +97,24 @@ func (p *ProductController) PostProduct(c *gin.Context) {
 
 	c.JSON(http.StatusCreated, product)
 }
+
+func (p *ProductController) PostNewUser(c *gin.Context) {
+	var userDto types.UserCreateDto
+
+	if err := c.BindJSON(&userDto); err != nil {
+		// status code 400 should be ok
+		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+		return
+	}
+
+	if err := p.productService.PostNewUser(&userDto); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusCreated, userDto)
+}
+
+func (p *ProductController) PostLoginUser(c *gin.Context) {
+
+}
