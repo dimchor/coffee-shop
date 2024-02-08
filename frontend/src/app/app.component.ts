@@ -6,7 +6,7 @@ import { HomepageComponent } from './homepage/homepage.component';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { JwtHelperService, JwtModule, JwtModuleOptions } from '@auth0/angular-jwt';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 
 
 @Component({
