@@ -17,26 +17,6 @@ func ping(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "pong"})
 }
 
-// for testing purposes
-type Tabler interface {
-	TableName() string
-}
-
-type Help struct {
-	HelpTopicId    uint   `gorm:"primaryKey"`
-	Name           string `gorm:"size:64"`
-	HelpCategoryId uint
-	Description    string
-	Example        string
-	Url            string
-}
-
-func (Help) TableName() string {
-	return "help_topic"
-}
-
-// ...
-
 type WaitOptions struct {
 	Interval    uint
 	StartPeriod uint
@@ -63,10 +43,6 @@ func try_opening(dsn string, config *gorm.Config,
 }
 
 func main() {
-	//cup := Cup{Product{"Standard cup", "c0001", 1.0}, MEDIUM}
-
-	//fmt.Println(cup)
-
 	password := os.Getenv("DB_ROOT_PASSWORD")
 	const database_name = "coffeeshop"
 	dsn := "root:" + password + "@tcp(db:3306)/" +
@@ -89,7 +65,7 @@ func main() {
 	r := gin.Default()
 	r.GET("/ping", ping)
 
-	r.GET("/v1/get/productss", productController.GetProducts)
+	r.GET("/v1/get/products", productController.GetProducts)
 	r.GET("/v1/get/product/:id", productController.GetProductById)
 	r.POST("/v1/post/product", productController.PostProduct)
 

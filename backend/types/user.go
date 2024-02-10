@@ -4,6 +4,7 @@ import "strconv"
 
 type User struct {
 	Base
+	Username    string `gorm:"unique"`
 	FirstName   string
 	LastName    string
 	Address     string
@@ -13,7 +14,7 @@ type User struct {
 }
 
 type UserLoginDto struct {
-	Id       string `json:"id"`
+	Username string `json:"username"`
 	Password string `json:"password"`
 }
 
@@ -21,19 +22,31 @@ type UserCreateDto struct {
 	FirstName   string `json:"first_name"`
 	LastName    string `json:"last_name"`
 	Address     string `json:"address"`
+	Username    string `json:"username"`
 	Password    string `json:"password"`
 	AdminRights bool   `json:"adminrights"`
 }
 
 type UserDetailsDto struct {
-	Id          string `json:"id"`
+	Username    string `json:"username"`
 	FirstName   string `json:"first_name"`
 	LastName    string `json:"last_name"`
 	Address     string `json:"address"`
 	AdminRights bool   `json:"adminrights"`
 }
 
-func (u *User) ToDetailsDtop() *UserDetailsDto {
+type UserChangePasswordDto struct {
+	Username    string `json:"username"`
+	OldPassword string `json:"old_password"`
+	NewPassword string `json:"new_password"`
+}
+
+func (u *User) ToDetailsDto() *UserDetailsDto {
 	return &UserDetailsDto{strconv.FormatUint(u.ID, 10), u.FirstName,
 		u.LastName, u.Address, u.AdminRights}
+}
+
+func (u *UserCreateDto) ToUser(salt string, hash string) *User {
+	return &User{Base{}, u.Username, u.FirstName, u.LastName, u.Address, salt,
+		hash, u.AdminRights}
 }
