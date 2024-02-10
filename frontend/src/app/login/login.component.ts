@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -18,7 +19,7 @@ export class LoginComponent {
     username: "",
     password: ""
   }
-
+  constructor(private router: Router) { }
   session: any;
 
   login(user: string, pass: string) {
@@ -28,6 +29,7 @@ export class LoginComponent {
     //this.session =
     if (true) {
       localStorage.setItem('session', JSON.stringify(this.session))
+      this.router.navigate(['/account']);
     }
     return this.user;
   }

@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-navbar',
@@ -12,10 +12,12 @@ import { RouterModule } from '@angular/router';
 export class NavbarComponent {
   @Input() currentTab = ""
 
-
+  constructor(private router: Router) { }
   session = localStorage.getItem('session');
 
   logout() {
     localStorage.removeItem('session');
+    this.router.navigate(['/login']);
+    //this.router.navigate(['/homepage']);
   }
 }

@@ -1,1 +1,70 @@
-<p>account-page works!</p>
+<app-navbar></app-navbar>
+
+<div class="container">
+    <div id="options">
+        <div class="userframe">
+            <div class="user-img">
+                <img id="pfp" src="/assets/pfp_default.png" alt="image">
+            </div>
+            <div id="username">
+                <h4 id="username-heading" style="text-align:center">{{username}}</h4>
+            </div>
+            <div class="user-content">
+                <!-- <ul>
+                    <li><button (click)="changePass()">Orders</button></li>
+                    <li><button (click)="changePass()">Shopping Cart</button></li>
+                    <li><button (click)="changePass()">Change Password</button></li>
+                </ul> -->
+
+                <div class="user-btn-div"><button class="user-btn" (click)="viewOrders()">View Orders</button></div>
+                <div class="user-btn-div"><button class="user-btn" (click)="viewCart()">Shopping Cart</button></div>
+                <div class="user-btn-div"><button class="user-btn" (click)="changePass()">Change Password</button></div>
+            </div>
+        </div>
+    </div>
+
+
+    <div id="details">
+        <div class="orders" *ngIf="state==1">
+            <h3 style="text-align:center">Previous Orders</h3>
+            <table>
+                <tr>
+                    <th>#</th>
+                    <th>Order ID</th>
+                    <th>Date</th>
+                    <th>Total Cost</th>
+                    <th>Status</th>
+                </tr>
+                <tr *ngFor="let x of orders; index as ii">
+                    <td>{{ii+1}}</td>
+                    <td>{{ x.ID }}</td>
+                    <td>{{ x.date }}</td>
+                    <td>{{ x.cost }}</td>
+                    <td>{{ x.curStatus }}</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="cart" *ngIf="state==2">
+            <div>
+                <h3 style="text-align:center">Shopping Cart</h3>
+                <table>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Product ID</th>
+                        <th>Cost</th>
+                        <th>Quantity</th>
+                    </tr>
+                    <tr *ngFor="let x of cart; index as ii">
+                        <td>{{ii+1}}</td>
+                        <td>{{ x.name }}</td>
+                        <td>{{ x.ID }}</td>
+                        <td>{{ x.cost }}</td>
+                        <td>{{ x.quantity }}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+    </div>
