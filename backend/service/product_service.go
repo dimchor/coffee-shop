@@ -28,6 +28,11 @@ func NewProductService(db *gorm.DB) (*ProductService, error) {
 		return nil, err
 	}
 
+	err = db.AutoMigrate(&types.Order{})
+	if err != nil {
+		return nil, err
+	}
+
 	return &ProductService{db}, nil
 }
 
