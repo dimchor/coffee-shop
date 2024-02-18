@@ -9,7 +9,8 @@ type Order struct {
 	ProductID uint64 `gorm:"primaryKey; not null"`
 	Product   Product
 	Count     uint32
-	// add session
+	SessionID uint64
+	Session   Session
 }
 
 type OrderCreateDto struct {
