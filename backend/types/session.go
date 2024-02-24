@@ -1,6 +1,8 @@
 package types
 
-import "crypto/rand"
+import (
+	"github.com/google/uuid"
+)
 
 const SESSION_ID_SIZE = 16
 
@@ -12,11 +14,7 @@ type Session struct {
 }
 
 func NewSession(user_id uint64) (*Session, error) {
-	session_id := make([]byte, SESSION_ID_SIZE)
+	token := uuid.New()
 
-	if _, err := rand.Read(session_id); err != nil {
-		return nil, err
-	}
-
-	return &Session{Base{}, [16]byte(session_id), user_id, User{}}, nil
+	return &Session{Base{}, token, user_id, User{}}, nil
 }
