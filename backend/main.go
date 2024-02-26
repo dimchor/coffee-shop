@@ -48,7 +48,7 @@ func main() {
 	dsn := "root:" + password + "@tcp(db:3306)/" +
 		database_name + "?charset=utf8mb4&parseTime=True&loc=Local"
 
-	db, err := try_opening(dsn, &gorm.Config{}, WaitOptions{30, 30, 5})
+	db, err := try_opening(dsn, &gorm.Config{}, WaitOptions{30, 30, 10})
 	if err != nil {
 		fmt.Printf("Database connection error: %s\n", err.Error())
 		return
