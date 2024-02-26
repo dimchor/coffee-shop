@@ -13,8 +13,7 @@ type Session struct {
 	User   User
 }
 
-func NewSession(user_id uint64) (*Session, error) {
+func NewSession(user_id uint64) (uuid.UUID, *Session) {
 	token := uuid.New()
-
-	return &Session{Base{}, token, user_id, User{}}, nil
+	return token, &Session{Base{}, token, user_id, User{}}
 }

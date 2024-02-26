@@ -24,7 +24,7 @@ type UserCreateDto struct {
 	Address     string `json:"address"`
 	Username    string `json:"username"`
 	Password    string `json:"password"`
-	AdminRights bool   `json:"adminrights"`
+	AdminRights bool   `json:"admin_rights"`
 }
 
 type UserDetailsDto struct {
@@ -32,7 +32,7 @@ type UserDetailsDto struct {
 	FirstName   string `json:"first_name"`
 	LastName    string `json:"last_name"`
 	Address     string `json:"address"`
-	AdminRights bool   `json:"adminrights"`
+	AdminRights bool   `json:"admin_rights"`
 }
 
 type UserChangePasswordDto struct {
