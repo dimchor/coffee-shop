@@ -10,15 +10,12 @@
                 <h4 id="username-heading" style="text-align:center">{{username}}</h4>
             </div>
             <div class="user-content">
-                <!-- <ul>
-                    <li><button (click)="changePass()">Orders</button></li>
-                    <li><button (click)="changePass()">Shopping Cart</button></li>
-                    <li><button (click)="changePass()">Change Password</button></li>
-                </ul> -->
-
                 <div class="user-btn-div"><button class="user-btn" (click)="viewOrders()">View Orders</button></div>
                 <div class="user-btn-div"><button class="user-btn" (click)="viewCart()">Shopping Cart</button></div>
                 <div class="user-btn-div"><button class="user-btn" (click)="changePass()">Change Password</button></div>
+                <div class="user-btn-div"><button class="user-btn" (click)="checkout()">Proceed to
+                        checkout</button>
+                </div>
             </div>
         </div>
     </div>
@@ -54,14 +51,14 @@
                         <th>Name</th>
                         <th>Product ID</th>
                         <th>Cost</th>
-                        <th>Quantity</th>
+                        <th>Remove</th>
                     </tr>
                     <tr *ngFor="let x of cart; index as ii">
                         <td>{{ii+1}}</td>
-                        <td>{{ x.name }}</td>
-                        <td>{{ x.ID }}</td>
-                        <td>{{ x.cost }}</td>
-                        <td>{{ x.quantity }}</td>
+                        <td>{{ x.pName }}</td>
+                        <td>{{ x.pID }}</td>
+                        <td>{{ x.pPrice }}</td>
+                        <td><button class="remove-btn" (click)="removeProduct(ii)">-</button></td>
                     </tr>
                 </table>
             </div>
