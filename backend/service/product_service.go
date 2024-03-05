@@ -4,9 +4,7 @@ import (
 	"coffee_shop_backend/types"
 	"encoding/base64"
 
-	"bytes"
 	"crypto/rand"
-	"errors"
 
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
@@ -93,14 +91,14 @@ func (p *ProductService) PostNewUser(userDto *types.UserCreateDto) error {
 func (p *ProductService) PostLoginUser(userDto *types.UserLoginDto) (string, error) {
 	var user types.User
 	result := p.db.First(&user, "username = ?", userDto.Username)
-	if result != nil {
+	if result.Error != nil {
 		return "", result.Error
 	}
 
-	password_hash := append([]byte(userDto.Password), []byte(user.Salt)...)
+	password := append([]byte(userDto.Password), []byte(user.Salt)...)
 
-	if !bytes.Equal(password_hash, []byte(user.Hash)) {
-		return "", errors.New("incorrect password")
+	if err := bcrypt.CompareHashAndPassword([]byte(user.Hash), password); err != nil {
+		return "", err
 	}
 
 	token, session := types.NewSession(user.ID)
@@ -110,5 +108,5 @@ func (p *ProductService) PostLoginUser(userDto *types.UserLoginDto) (string, err
 		return "", result.Error
 	}
 
-	return token.String(), nil
+	return token, nil
 }

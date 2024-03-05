@@ -8,12 +8,12 @@ const SESSION_ID_SIZE = 16
 
 type Session struct {
 	Base
-	Token  [SESSION_ID_SIZE]byte `gorm:"unique;size:16"`
+	Token  string `gorm:"unique"`
 	UserID uint64
 	User   User
 }
 
-func NewSession(user_id uint64) (uuid.UUID, *Session) {
-	token := uuid.New()
+func NewSession(user_id uint64) (string, *Session) {
+	token := uuid.NewString()
 	return token, &Session{Base{}, token, user_id, User{}}
 }
