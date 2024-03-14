@@ -34,9 +34,22 @@ export class AccountPageComponent {
     this.cart = this.CartService.getList()
   }
 
-  changePass() {
-
+  async ping() {
+    let response = await fetch('http://localhost:8080/ping', {
+      method: 'GET',
+      headers: {
+        Accept: "/ping",
+      },
+      mode: 'no-cors'
+    });
+    let text = await response.text();
+    return text;
   }
+
+  changePass() {
+    alert(this.ping());
+  }
+
 
   removeProduct(index: number) {
     //this.cart = this.cart.filter(item => item !== this.cart[index]);
