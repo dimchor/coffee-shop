@@ -14,6 +14,8 @@ import (
 )
 
 func ping(c *gin.Context) {
+	c.Header("Access-Control-Allow-Origin", "http://127.0.0.1:4200")
+
 	c.JSON(http.StatusOK, gin.H{"message": "pong"})
 }
 
@@ -63,11 +65,19 @@ func main() {
 		NewProductController(productService)
 
 	r := gin.Default()
+	/*
+		r.Use(cors.New(cors.Config{
+			AllowOrigins: []string{"http://frontend:4200"},
+			AllowMethods: []string{"GET", "POST", "DELETE"},
+		}))
+	*/
 	r.GET("/ping", ping)
 
 	r.GET("/v1/get/products", productController.GetProducts)
 	r.GET("/v1/get/product/:id", productController.GetProductById)
 	r.POST("/v1/post/product", productController.PostProduct)
+	r.POST("/v1/post/new_user", productController.PostNewUser)
+	r.POST("/v1/post/login_user", productController.PostLoginUser)
 
 	r.Run()
 }

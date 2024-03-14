@@ -7,5 +7,5 @@ type IProductService interface {
 	GetProductById(uint64) (*types.Product, error)
 	PostProduct(*types.Product) error
 	PostNewUser(*types.UserCreateDto) error
-	PostLoginUser(*types.UserLoginDto) error
+	PostLoginUser(*types.UserLoginDto) (string, error)
 }

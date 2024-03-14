@@ -9,6 +9,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+const MAX_AGE = 604800 // one week in seconds
+
 type ProductController struct {
 	productService service.IProductService
 }
@@ -116,5 +118,25 @@ func (p *ProductController) PostNewUser(c *gin.Context) {
 }
 
 func (p *ProductController) PostLoginUser(c *gin.Context) {
+	var userDto types.UserLoginDto
 
+	if err := c.BindJSON(&userDto); err != nil {
+		// status code 400 should be ok
+		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+		return
+	}
+
+	token, err := p.productService.PostLoginUser(&userDto)
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"message": err.Error()})
+		return
+	}
+
+	c.SetCookie("session_id", token, MAX_AGE, "", "localhost", false, true)
+	c.JSON(http.StatusOK, userDto)
+}
+
+func (p *ProductController) PostLogout(c *gin.Context) {
+	c.SetCookie("session_id", "", -1, "", "localhost", false, true)
+	c.JSON(http.StatusOK, gin.H{"message": "logged out"})
 }
