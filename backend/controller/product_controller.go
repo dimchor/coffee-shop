@@ -155,7 +155,7 @@ func (p *ProductController) PostLoginUser(c *gin.Context) {
 		return
 	}
 
-	c.SetCookie(SESSION_COOKIE, token, MAX_AGE, "", "localhost", false, true)
+	c.SetCookie(SESSION_COOKIE, token, MAX_AGE, "", "127.0.0.1", false, true)
 	c.JSON(http.StatusOK, userDto)
 }
 
