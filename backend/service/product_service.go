@@ -47,14 +47,24 @@ func NewProductService(db *gorm.DB) (*ProductService, error) {
 		return nil, errors.New("COFFEESHOP_ROOT_PASSWORD variable not set")
 	}
 
-	err = productService.PostNewUser(&types.UserCreateDto{
-		Username:    "root",
-		Password:    password,
-		AdminRights: true,
-	})
+	var user types.User
+	result := productService.db.First(&user, "username = ?", "root")
 
-	if err != nil {
-		return nil, err
+	if result.RowsAffected == 1 {
+		err = productService.changePassword(&user, password)
+		if err != nil {
+			return nil, err
+		}
+	} else {
+		err = productService.PostNewUser(&types.UserCreateDto{
+			Username:    "root",
+			Password:    password,
+			AdminRights: true,
+		})
+
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	return &productService, nil
@@ -114,6 +124,9 @@ func (p *ProductService) PostLoginUser(userDto *types.UserLoginDto) (string, err
 	if result.Error != nil {
 		return "", result.Error
 	}
+	if result.RowsAffected != 1 {
+		return "", errors.New("username not found")
+	}
 
 	password := append([]byte(userDto.Password), []byte(user.Salt)...)
 
@@ -133,10 +146,41 @@ func (p *ProductService) PostLoginUser(userDto *types.UserLoginDto) (string, err
 
 func (p *ProductService) HasAdminRights(session_id string) bool {
 	var session types.Session
-	p.db.First(&session, "token = ?", session_id)
+	result := p.db.First(&session, "token = ?", session_id)
+	if result.RowsAffected != 1 {
+		return false
+	}
 
 	var user types.User
-	p.db.First(&user, session.UserID)
+	result = p.db.First(&user, session.UserID)
+	if result.RowsAffected != 1 {
+		return false
+	}
 
 	return user.AdminRights
+}
+
+func (p *ProductService) changePassword(user *types.User, password string) error {
+	salt, err := p.makeSalt()
+	if err != nil {
+		return err
+	}
+
+	password_bytes := append([]byte(password), salt...)
+
+	hash, err := bcrypt.GenerateFromPassword(password_bytes, bcrypt.DefaultCost)
+	if err != nil {
+		return err
+	}
+
+	user.Hash = string(hash)
+	user.Salt = string(salt)
+
+	result := p.db.Save(&user)
+
+	if result.Error != nil {
+		return result.Error
+	}
+
+	return nil
 }
