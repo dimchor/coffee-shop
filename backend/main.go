@@ -46,31 +46,30 @@ func try_opening(dsn string, config *gorm.Config,
 
 func main() {
 	password := os.Getenv("DB_ROOT_PASSWORD")
+	if password == "" {
+		fmt.Printf("DB_ROOT_PASSWORD variable not set")
+		return
+	}
+
 	const database_name = "coffeeshop"
 	dsn := "root:" + password + "@tcp(db:3306)/" +
 		database_name + "?charset=utf8mb4&parseTime=True&loc=Local"
 
 	db, err := try_opening(dsn, &gorm.Config{}, WaitOptions{30, 30, 10})
 	if err != nil {
-		fmt.Printf("Database connection error: %s\n", err.Error())
+		fmt.Printf("database connection error: %s\n", err.Error())
 		return
 	}
 
 	productService, err := service.NewProductService(db)
 	if err != nil {
-		fmt.Printf("Product service error: %s\n", err.Error())
+		fmt.Printf("product service error: %s\n", err.Error())
 	}
 
 	var productController controller.IProductController = controller.
 		NewProductController(productService)
 
 	r := gin.Default()
-	/*
-		r.Use(cors.New(cors.Config{
-			AllowOrigins: []string{"http://frontend:4200"},
-			AllowMethods: []string{"GET", "POST", "DELETE"},
-		}))
-	*/
 	r.GET("/ping", ping)
 
 	r.GET("/v1/get/products", productController.GetProducts)
@@ -78,6 +77,8 @@ func main() {
 	r.POST("/v1/post/product", productController.PostProduct)
 	r.POST("/v1/post/new_user", productController.PostNewUser)
 	r.POST("/v1/post/login_user", productController.PostLoginUser)
+	r.POST("/v1/post/logout_user", productController.PostLogoutUser)
+	r.GET("/v1/post/has_admin_rights", productController.HasAdminRights)
 
 	r.Run()
 }

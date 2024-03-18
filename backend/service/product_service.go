@@ -3,6 +3,8 @@ package service
 import (
 	"coffee_shop_backend/types"
 	"encoding/base64"
+	"errors"
+	"os"
 
 	"crypto/rand"
 
@@ -37,7 +39,25 @@ func NewProductService(db *gorm.DB) (*ProductService, error) {
 		return nil, err
 	}
 
-	return &ProductService{db}, nil
+	productService := ProductService{db}
+
+	// root user setup
+	password := os.Getenv("COFFEESHOP_ROOT_PASSWORD")
+	if password == "" {
+		return nil, errors.New("COFFEESHOP_ROOT_PASSWORD variable not set")
+	}
+
+	err = productService.PostNewUser(&types.UserCreateDto{
+		Username:    "root",
+		Password:    password,
+		AdminRights: true,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &productService, nil
 }
 
 func (p *ProductService) GetProducts() ([]types.Product, error) {
@@ -109,4 +129,14 @@ func (p *ProductService) PostLoginUser(userDto *types.UserLoginDto) (string, err
 	}
 
 	return token, nil
+}
+
+func (p *ProductService) HasAdminRights(session_id string) bool {
+	var session types.Session
+	p.db.First(&session, "token = ?", session_id)
+
+	var user types.User
+	p.db.First(&user, session.UserID)
+
+	return user.AdminRights
 }
