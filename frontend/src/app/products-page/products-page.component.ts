@@ -4,6 +4,7 @@ import { ProductGridComponent } from '../product-grid/product-grid.component';
 import { ProductFiltersComponent } from '../product-filters/product-filters.component';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { ProductComponent } from '../product/product.component';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-products-page',
@@ -14,11 +15,11 @@ import { ProductComponent } from '../product/product.component';
 })
 export class ProductsPageComponent {
 
-  receiveMSG($event: ProductComponent[]) {
-    this.filteredList = $event
-  }
-
-  productList = [
+  json_productList: any
+  productList: any
+  filteredList: any
+  tags: any
+  pList = [
     new ProductComponent('Java gia olous', '22.80', "Blends", "1001", "../assets/java-logo.jpg"),
     new ProductComponent('Java gia ligous', '47.50', "Blends", "1002", "../assets/java-logo.jpg"),
     new ProductComponent('Java gia kanenan', '89.20', "Blends", "1003", "../assets/java-logo.jpg"),
@@ -26,9 +27,72 @@ export class ProductsPageComponent {
     new ProductComponent('See sharp', '14.70', "Tea", "1005", "../assets/C_Logo.png"),
     new ProductComponent('See plus plus', '185.00', "Tea", "1006", "../assets/C_Logo.png"),
     new ProductComponent('Bython', '89.20', "Utilities", "1007", "../assets/java-logo.jpg")
-
   ]
-  tags = ["Blends", "Tea", "Utilities"]
 
-  filteredList = this.productList
+  x = {
+    name: "",
+    price: 0,
+    description: "",
+  }
+
+  receiveMSG($event: ProductComponent[]) {
+    this.filteredList = $event
+  }
+
+  constructor(private http: HttpClient) {
+
+    for (var p of this.pList) {
+      this.x.name = p.pName
+      this.x.price = parseFloat(p.pPrice)
+      this.x.description = p.pTag
+
+      this.http.post('http://localhost:8080/v1/post/product', this.x);
+    }
+
+    // this.http.get('http://localhost:8080/GetProducts').
+    //   subscribe((json_productList) => {
+    //     console.log(json_productList);
+    //     this.json_productList = json_productList;
+    //   });
+
+    //this.json_productList = this.http.get('http://localhost:8080/GetProducts')
+
+    this.json_productList = this.getPrdList()
+
+    console.log("kek");
+    console.log(this.json_productList);
+
+    this.productList = JSON.parse(this.json_productList)
+
+    // for (var obj of this.json_productList) {
+    //   this.productList.append(JSON.parse(obj))
+    // }
+
+    this.tags = ["Blends", "Tea", "Utilities"]
+
+    for (var obj of this.productList) {
+      this.filteredList = new ProductComponent(obj.name, obj.price, obj.description, obj.id, "../assets/java-logo.jpg")
+    }
+  }
+
+
+  async getPrdList() {
+    let response = await fetch('http://localhost:8080/GetProducts', {
+      method: 'GET'
+    });
+    let text = await response.text();
+    return text;
+  }
+
+  // productList = [
+  //   new ProductComponent('Java gia olous', '22.80', "Blends", "1001", "../assets/java-logo.jpg"),
+  //   new ProductComponent('Java gia ligous', '47.50', "Blends", "1002", "../assets/java-logo.jpg"),
+  //   new ProductComponent('Java gia kanenan', '89.20', "Blends", "1003", "../assets/java-logo.jpg"),
+  //   new ProductComponent('See ', '0.99', "Tea", "1004", "../assets/C_Logo.png"),
+  //   new ProductComponent('See sharp', '14.70', "Tea", "1005", "../assets/C_Logo.png"),
+  //   new ProductComponent('See plus plus', '185.00', "Tea", "1006", "../assets/C_Logo.png"),
+  //   new ProductComponent('Bython', '89.20', "Utilities", "1007", "../assets/java-logo.jpg")
+
+  // ]
+
 }
