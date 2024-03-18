@@ -3,6 +3,7 @@ package controller
 import (
 	"coffee_shop_backend/service"
 	"coffee_shop_backend/types"
+	"errors"
 	"net/http"
 	"strconv"
 
@@ -10,9 +11,15 @@ import (
 )
 
 const MAX_AGE = 604800 // one week in seconds
+const FRONTEND_IP_PORT = "http://127.0.0.1:4200"
+const SESSION_COOKIE = "session_id"
 
 type ProductController struct {
 	productService service.IProductService
+}
+
+func setupHeader(c *gin.Context) {
+	c.Header("Access-Control-Allow-Origin", FRONTEND_IP_PORT)
 }
 
 func NewProductController(productService service.IProductService) *ProductController {
@@ -47,6 +54,7 @@ func NewProductController(productService service.IProductService) *ProductContro
 }
 
 func (p *ProductController) GetProducts(c *gin.Context) {
+	setupHeader(c)
 	products, err := p.productService.GetProducts()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"message": err.Error()})
@@ -61,6 +69,7 @@ func (p *ProductController) GetProducts(c *gin.Context) {
 }
 
 func (p *ProductController) GetProductById(c *gin.Context) {
+	setupHeader(c)
 
 	id, err := strconv.ParseUint(c.Param("id"), 10, 64)
 	if err != nil {
@@ -82,11 +91,17 @@ func (p *ProductController) GetProductById(c *gin.Context) {
 }
 
 func (p *ProductController) PostProduct(c *gin.Context) {
+	setupHeader(c)
 	var productDto types.ProductPostDto
 
 	if err := c.BindJSON(&productDto); err != nil {
 		// status code 400 should be ok
 		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+		return
+	}
+
+	if !p.hasAdminRights(c) {
+		c.JSON(http.StatusForbidden, errors.New("nuh uh!"))
 		return
 	}
 
@@ -101,11 +116,18 @@ func (p *ProductController) PostProduct(c *gin.Context) {
 }
 
 func (p *ProductController) PostNewUser(c *gin.Context) {
+	setupHeader(c)
+
 	var userDto types.UserCreateDto
 
 	if err := c.BindJSON(&userDto); err != nil {
 		// status code 400 should be ok
 		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+		return
+	}
+
+	if userDto.AdminRights && !p.hasAdminRights(c) {
+		c.JSON(http.StatusForbidden, errors.New("nuh uh!"))
 		return
 	}
 
@@ -118,6 +140,7 @@ func (p *ProductController) PostNewUser(c *gin.Context) {
 }
 
 func (p *ProductController) PostLoginUser(c *gin.Context) {
+	setupHeader(c)
 	var userDto types.UserLoginDto
 
 	if err := c.BindJSON(&userDto); err != nil {
@@ -132,11 +155,31 @@ func (p *ProductController) PostLoginUser(c *gin.Context) {
 		return
 	}
 
-	c.SetCookie("session_id", token, MAX_AGE, "", "localhost", false, true)
+	c.SetCookie(SESSION_COOKIE, token, MAX_AGE, "", "localhost", false, true)
 	c.JSON(http.StatusOK, userDto)
 }
 
-func (p *ProductController) PostLogout(c *gin.Context) {
-	c.SetCookie("session_id", "", -1, "", "localhost", false, true)
+func (p *ProductController) PostLogoutUser(c *gin.Context) {
+	setupHeader(c)
+	c.SetCookie(SESSION_COOKIE, "", -1, "", "localhost", false, true)
 	c.JSON(http.StatusOK, gin.H{"message": "logged out"})
+}
+
+func (p *ProductController) hasAdminRights(c *gin.Context) bool {
+	cookie, err := c.Cookie(SESSION_COOKIE)
+	if err != nil {
+		return false
+	}
+	return p.productService.HasAdminRights(cookie)
+}
+
+func (p *ProductController) HasAdminRights(c *gin.Context) {
+	setupHeader(c)
+
+	if p.hasAdminRights(c) {
+		c.JSON(http.StatusForbidden, gin.H{"message": false})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": true})
 }

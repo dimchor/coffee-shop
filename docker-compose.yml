@@ -16,6 +16,7 @@ services:
     build: ./backend
     environment:
       - DB_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+      - COFFEESHOP_ROOT_PASSWORD=${COFFEESHOP_ROOT_PASSWORD}
     ports: "8080:8080"
     restart: always
   frontend:
