@@ -4,6 +4,7 @@ import { NavbarComponent } from '../navbar/navbar.component';
 import { HttpClient } from '@angular/common/http';
 import { CartService } from '../cart.service';
 import { ProductComponent } from '../product/product.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-account-page',
@@ -19,15 +20,15 @@ export class AccountPageComponent {
   orders = [{ ID: "", date: "", cost: "", curStatus: "" }]
   //cart = [{ name: "", ID: "", cost: "" }]
   cart = [new ProductComponent('Java gia olous', '22.80', "Blends", "1001", "../assets/java-logo.jpg")]
-  constructor(private http: HttpClient, public CartService: CartService) {
+  constructor(private http: HttpClient, public CartService: CartService, private router: Router) {
+
+
     //API Call for account info
     //
-    // this.http.get('http://backend:8080/ping').
-    //   subscribe((data) => {
-    //     console.log(data);
-    //   });
-
-
+    this.http.get('http://localhost:8080/ping').
+      subscribe((data) => {
+        console.log(data);
+      });
 
     this.removeProduct(0)
     this.removeOrder(0)
@@ -36,11 +37,7 @@ export class AccountPageComponent {
 
   async ping() {
     let response = await fetch('http://localhost:8080/ping', {
-      method: 'GET',
-      headers: {
-        Accept: "/ping",
-      },
-      mode: 'no-cors'
+      method: 'GET'
     });
     let text = await response.text();
     return text;
@@ -73,4 +70,7 @@ export class AccountPageComponent {
     this.state = 2
   }
 
+  admin() {
+    this.router.navigate(['/admin']);
+  }
 }
