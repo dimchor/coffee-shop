@@ -25,6 +25,7 @@ type UserCreateDto struct {
 	Username    string `json:"username"`
 	Password    string `json:"password"`
 	AdminRights bool   `json:"admin_rights"`
+	Token       string `json:"token"`
 }
 
 type UserDetailsDto struct {
