@@ -11,7 +11,8 @@ import (
 )
 
 const MAX_AGE = 604800 // one week in seconds
-const FRONTEND_IP_PORT = "http://127.0.0.1:4200"
+const IP = "127.0.0.1"
+const FULL_IP_PORT = "http://" + IP + ":4200"
 const SESSION_COOKIE = "session_id"
 
 type ProductController struct {
@@ -19,7 +20,8 @@ type ProductController struct {
 }
 
 func setupHeader(c *gin.Context) {
-	c.Header("Access-Control-Allow-Origin", FRONTEND_IP_PORT)
+	c.Header("Access-Control-Allow-Origin", FULL_IP_PORT)
+	c.Header("Access-Control-Allow-Credentials", "true")
 }
 
 func NewProductController(productService service.IProductService) *ProductController {
@@ -100,7 +102,7 @@ func (p *ProductController) PostProduct(c *gin.Context) {
 		return
 	}
 
-	if !p.hasAdminRights(c) {
+	if !p.productService.HasAdminRights(productDto.Token) {
 		c.JSON(http.StatusForbidden, errors.New("nuh uh!"))
 		return
 	}
@@ -126,7 +128,7 @@ func (p *ProductController) PostNewUser(c *gin.Context) {
 		return
 	}
 
-	if userDto.AdminRights && !p.hasAdminRights(c) {
+	if userDto.AdminRights && !p.productService.HasAdminRights(userDto.Token) {
 		c.JSON(http.StatusForbidden, errors.New("nuh uh!"))
 		return
 	}
@@ -155,28 +157,29 @@ func (p *ProductController) PostLoginUser(c *gin.Context) {
 		return
 	}
 
-	c.SetCookie(SESSION_COOKIE, token, MAX_AGE, "", "127.0.0.1", false, true)
-	c.JSON(http.StatusOK, userDto)
+	c.JSON(http.StatusOK, token)
 }
 
 func (p *ProductController) PostLogoutUser(c *gin.Context) {
 	setupHeader(c)
-	c.SetCookie(SESSION_COOKIE, "", -1, "", "localhost", false, true)
+	//c.SetCookie(SESSION_COOKIE, "", -1, "/", FRONTEND, false, true)
 	c.JSON(http.StatusOK, gin.H{"message": "logged out"})
 }
 
-func (p *ProductController) hasAdminRights(c *gin.Context) bool {
-	cookie, err := c.Cookie(SESSION_COOKIE)
-	if err != nil {
-		return false
-	}
-	return p.productService.HasAdminRights(cookie)
-}
+// func (p *ProductController) hasAdminRights(c *gin.Context) bool {
+// 	cookie, err := c.Cookie(SESSION_COOKIE)
+// 	if err != nil {
+// 		return false
+// 	}
+// 	return p.productService.HasAdminRights(cookie)
+// }
 
 func (p *ProductController) HasAdminRights(c *gin.Context) {
 	setupHeader(c)
 
-	if p.hasAdminRights(c) {
+	token := c.Param("token")
+
+	if p.productService.HasAdminRights(token) {
 		c.JSON(http.StatusForbidden, gin.H{"message": false})
 		return
 	}

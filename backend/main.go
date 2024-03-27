@@ -78,7 +78,7 @@ func main() {
 	r.POST("/v1/post/new_user", productController.PostNewUser)
 	r.POST("/v1/post/login_user", productController.PostLoginUser)
 	r.POST("/v1/post/logout_user", productController.PostLogoutUser)
-	r.GET("/v1/post/has_admin_rights", productController.HasAdminRights)
+	r.GET("/v1/post/has_admin_rights/:token", productController.HasAdminRights)
 
 	r.Run()
 }
