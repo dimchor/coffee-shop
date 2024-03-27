@@ -1,0 +1,16 @@
+<div class="container">
+    <div id="options">
+        <h1>Administration page</h1>
+        <p>Insert Product</p>
+        <div class="fields">
+
+            <div class="field-div"><input type="text" [(ngModel)]="product.product_name" placeholder="Product Name">
+            </div>
+            <div class="field-div"><input type="text" [(ngModel)]="product.price" placeholder="Price"></div>
+            <div class="field-div"><textarea [(ngModel)]="product.description" rows="4" cols="50"
+                    placeholder="Description"></textarea></div>
+            <div class="field-div"><button
+                    (click)="submit(product.product_name, product.price, product.description)">Submit</button></div>
+        </div>
+    </div>
+</div>

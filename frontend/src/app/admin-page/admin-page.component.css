@@ -1,0 +1,33 @@
+.container {
+    position: absolute;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    padding-top: 2%;
+
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    background-color: #e6e9bd;
+}
+
+#options {
+    flex-basis: 30%;
+    align-content: center;
+    justify-content: center;
+
+    height: 50%;
+    margin-left: 1%;
+}
+
+.fields {
+
+    justify-content: center;
+    align-items: center;
+}
+
+.field-div {
+    margin: 1%;
+    display: flex;
+    justify-content: left;
+}

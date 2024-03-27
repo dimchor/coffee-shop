@@ -1,7 +1,7 @@
 <div class="wrapper">
     <div class="container">
         <div class="title">
-            <h1>Covfefe</h1>
+            <h1>Products</h1>
         </div>
 
         <div class="product">
@@ -11,7 +11,7 @@
                     <div class="product-img">
                         <img src="{{product.pImagePath}}" alt="image">
                         <div>
-                            <button type="button" class="add-btn">Add to Cart</button>
+                            <button type="button" (click)="setCart(product)" class="add-btn">Add to Cart</button>
                         </div>
                     </div>
                     <div class="product-content">

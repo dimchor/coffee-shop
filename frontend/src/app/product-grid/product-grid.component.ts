@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter, OnInit, SimpleChanges, OnChange
 import { CommonModule } from '@angular/common';
 import { ProductComponent } from '../product/product.component';
 import { Router } from '@angular/router';
+import { CartService } from '../cart.service';
 
 @Component({
   selector: 'app-product-grid',
@@ -19,5 +20,10 @@ export class ProductGridComponent implements OnChanges {
   @Input() list: ProductComponent[] = [];
   @Input() filteredList: ProductComponent[] = [];
 
+  constructor(public CartService: CartService) {
+  }
 
+  setCart(pr: ProductComponent): void {
+    this.CartService.pushList(pr)
+  }
 }
