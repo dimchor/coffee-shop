@@ -74,11 +74,11 @@ func main() {
 
 	r.GET("/v1/get/products", productController.GetProducts)
 	r.GET("/v1/get/product/:id", productController.GetProductById)
+	r.GET("/v1/get/has_admin_rights/:token", productController.HasAdminRights)
 	r.POST("/v1/post/product", productController.PostProduct)
 	r.POST("/v1/post/new_user", productController.PostNewUser)
 	r.POST("/v1/post/login_user", productController.PostLoginUser)
 	r.POST("/v1/post/logout_user", productController.PostLogoutUser)
-	r.GET("/v1/post/has_admin_rights/:token", productController.HasAdminRights)
 
 	r.Run()
 }

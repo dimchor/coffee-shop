@@ -103,7 +103,7 @@ func (p *ProductController) PostProduct(c *gin.Context) {
 	}
 
 	if !p.productService.HasAdminRights(productDto.Token) {
-		c.JSON(http.StatusForbidden, errors.New("nuh uh!"))
+		c.JSON(http.StatusForbidden, gin.H{"message": errors.New("nuh uh!")})
 		return
 	}
 
@@ -129,7 +129,7 @@ func (p *ProductController) PostNewUser(c *gin.Context) {
 	}
 
 	if userDto.AdminRights && !p.productService.HasAdminRights(userDto.Token) {
-		c.JSON(http.StatusForbidden, errors.New("nuh uh!"))
+		c.JSON(http.StatusForbidden, gin.H{"message": errors.New("nuh uh!")})
 		return
 	}
 
@@ -179,7 +179,7 @@ func (p *ProductController) HasAdminRights(c *gin.Context) {
 
 	token := c.Param("token")
 
-	if p.productService.HasAdminRights(token) {
+	if !p.productService.HasAdminRights(token) {
 		c.JSON(http.StatusForbidden, gin.H{"message": false})
 		return
 	}
