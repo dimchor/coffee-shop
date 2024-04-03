@@ -15,7 +15,8 @@
                 <div class="user-btn-div"><button class="user-btn" (click)="changePass()">Change Password</button></div>
                 <div class="user-btn-div"><button class="user-btn" (click)="checkout()">Proceed to checkout</button>
                 </div>
-                <div class="user-btn-div"><button (click)="admin()">Admin interface</button></div>
+                <div class="user-btn-div" *ngIf="hasAdmin == true"><button (click)="admin()">Admin interface</button>
+                </div>
             </div>
         </div>
     </div>

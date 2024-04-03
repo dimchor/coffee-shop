@@ -24,14 +24,12 @@ export class LoginComponent {
 
 
   post_str = ""
-  //response: any
   constructor(private router: Router, private http: HttpClient) { }
   session: any;
 
   async login(user: string, pass: string) {
 
     this.post_str = JSON.stringify({ "username": user, "password": pass })
-    //const response = this.http.post("http://localhost:8080/v1/post/login_user", this.post_str)
 
     const json = await fetch("http://localhost:8080/v1/post/login_user", {
       method: 'POST',
@@ -40,21 +38,12 @@ export class LoginComponent {
 
     console.log(json)
 
-    if (json.username === user && json.password === pass) {
-      localStorage.setItem('session', JSON.stringify(this.session))
+    if (json != null) {
+      localStorage.setItem('session', JSON.stringify(json))
       this.router.navigate(['/account']);
     }
 
-    // this.http.post("http://localhost:8080/v1/post/login_user", this.post_str).
-    //   subscribe((response) => {
-    //     console.log(response);
-    //     
-    //   });
-
-    //console.log(this.response)
-
-
-    return null//this.user;
+    return null
   }
 
 

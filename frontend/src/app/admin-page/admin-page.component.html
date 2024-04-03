@@ -4,13 +4,14 @@
         <p>Insert Product</p>
         <div class="fields">
 
-            <div class="field-div"><input type="text" [(ngModel)]="product.product_name" placeholder="Product Name">
+            <div class="field-div"><input type="text" [(ngModel)]="tmp.product_name" placeholder="Product Name">
             </div>
-            <div class="field-div"><input type="text" [(ngModel)]="product.price" placeholder="Price"></div>
-            <div class="field-div"><textarea [(ngModel)]="product.description" rows="4" cols="50"
-                    placeholder="Description"></textarea></div>
+            <div class="field-div"><input type="text" [(ngModel)]="tmp.price" placeholder="Price"></div>
+            <!-- <div class="field-div"><textarea [(ngModel)]="product.description" rows="4" cols="50"
+                    placeholder="Description"></textarea></div> -->
+            <div class="field-div"><input type="text" [(ngModel)]="tmp.description" placeholder="Tag"></div>
             <div class="field-div"><button
-                    (click)="submit(product.product_name, product.price, product.description)">Submit</button></div>
+                    (click)="submit(tmp.product_name, tmp.price, tmp.description)">Submit</button></div>
         </div>
     </div>
 </div>

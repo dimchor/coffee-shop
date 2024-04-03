@@ -11,23 +11,32 @@ import { FormsModule } from '@angular/forms';
 })
 export class AdminPageComponent {
 
-  product_json: any
-  product = {
+  post_str = ""
+  tmp = {
     product_name: "",
     price: "",
     description: ""
+    //token: localStorage.getItem('session')
   }
-
+  product = {
+    product_name: "",
+    price: 0,
+    description: "",
+    token: localStorage.getItem('session')
+  }
   constructor() { }
 
-  submit(name: string, price: string, description: string) {
+  async submit(name: string, price: string, description: string) {
     this.product.product_name = name
-    this.product.price = price
+    this.product.price = parseFloat(price)
     this.product.description = description
 
-    this.product_json = JSON.stringify(this.product)
+    this.post_str = JSON.stringify(this.product)
     //POST
-
+    const json = await fetch("http://localhost:8080/v1/post/product", {
+      method: 'POST',
+      body: this.post_str
+    }).then((response) => response.json())
 
   }
 

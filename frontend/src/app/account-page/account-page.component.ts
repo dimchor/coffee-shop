@@ -16,6 +16,8 @@ import { Router } from '@angular/router';
 export class AccountPageComponent {
   username = "placeholder"
   state = 2
+  hasAdmin = false
+  account: any
   //orders = [{ ID: "128734", date: "22-2-2024", cost: "45.75", curStatus: "Completed" }]
   orders = [{ ID: "", date: "", cost: "", curStatus: "" }]
   //cart = [{ name: "", ID: "", cost: "" }]
@@ -25,22 +27,22 @@ export class AccountPageComponent {
 
     //API Call for account info
     //
-    this.http.get('http://localhost:8080/ping').
-      subscribe((data) => {
-        console.log(data);
-      });
+    this.account = this.getAccount()
 
     this.removeProduct(0)
     this.removeOrder(0)
     this.cart = this.CartService.getList()
   }
 
-  async ping() {
-    let response = await fetch('http://localhost:8080/ping', {
+  async getAccount() {
+    const json = await fetch("http://localhost:8080/", {
       method: 'GET'
-    });
-    let text = await response.text();
-    return text;
+    }).then((response) => response.json())
+
+    if (json != null) {
+      localStorage.setItem('session', JSON.stringify(json.token))
+      this.router.navigate(['/account']);
+    }
   }
 
   changePass() {
