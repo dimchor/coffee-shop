@@ -3,5 +3,8 @@
 
     <input type="text" [(ngModel)]="username" placeholder="Username">
     <input type="password" [(ngModel)]="password" placeholder="Password">
-    <button (click)="register(username, password)">Register</button>
+    <input type="text" [(ngModel)]="first_name" placeholder="First Name">
+    <input type="text" [(ngModel)]="last_name" placeholder="Last Name">
+    <input type="text" [(ngModel)]="address" placeholder="Address">
+    <button (click)="register(username, password, first_name, last_name, address)">Register</button>
 </div>

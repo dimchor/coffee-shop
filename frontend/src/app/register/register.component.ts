@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -14,26 +15,44 @@ export class RegisterComponent {
 
   username = ""
   password = ""
+  first_name = ""
+  last_name = ""
+  address = ""
 
   user = {
     username: "",
-    password: ""
+    password: "",
+    first_name: "",
+    last_name: "",
+    address: ""
   }
-  constructor(private http: HttpClient) { };
+
+  post_str = ""
+
+  constructor(private router: Router, private http: HttpClient) { };
   session: any;
 
-  register(user: string, pass: string) {
+  async register(user: string, pass: string, fn: string, ln: string, addr: string) {
 
     alert(user + pass)
-    //CALL API
-    //this.session =
 
-    this.http.get('http://backend:8080/ping').
-      subscribe((data) => {
-        console.log(data)
-        alert(data)
-      });
+    this.post_str = JSON.stringify({
+      "username": user,
+      "password": pass,
+      "first_name": fn,
+      "last_name": ln,
+      "address": addr
+    })
 
+    const json = await fetch("http://localhost:8080/v1/post/new_user", {
+      method: 'POST',
+      body: this.post_str
+    }).then((response) => response.json())
+
+    if (json != null) {
+      localStorage.setItem('session', JSON.stringify(json.token))
+      this.router.navigate(['/account']);
+    }
   }
 
 

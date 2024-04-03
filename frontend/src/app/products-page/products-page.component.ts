@@ -17,7 +17,7 @@ export class ProductsPageComponent {
 
   json_productList: any
   productList: any
-  filteredList: any
+  filteredList: ProductComponent[] = []
   tags: any
   pList = [
     new ProductComponent('Java gia olous', '22.80', "Blends", "1001", "../assets/java-logo.jpg"),
@@ -46,8 +46,19 @@ export class ProductsPageComponent {
       this.x.price = parseFloat(p.pPrice)
       this.x.description = p.pTag
 
-      this.http.post('http://localhost:8080/v1/post/product', this.x);
+      this.http.post('http://localhost:8080/v1/post/product', JSON.stringify(this.x));
     }
+    this.getPrdList()
+
+  }
+
+
+  async getPrdList() {
+    // const response = await fetch('http://localhost:8080/v1/get/products', {
+    //   method: 'GET'
+    // }).then((response) => response.json())
+    // //let text = await response.text();
+    // return response;
 
     // this.http.get('http://localhost:8080/GetProducts').
     //   subscribe((json_productList) => {
@@ -57,31 +68,32 @@ export class ProductsPageComponent {
 
     //this.json_productList = this.http.get('http://localhost:8080/GetProducts')
 
-    this.json_productList = this.getPrdList()
+    //this.json_productList = this.getPrdList()
 
-    console.log("kek");
-    console.log(this.json_productList);
 
-    this.productList = JSON.parse(this.json_productList)
+    const json = await fetch('http://localhost:8080/v1/get/products', {
+      method: 'GET'
+    }).then((response) => response.json())
+
+    console.log(json);
+
+    this.productList = json
+    console.log(this.productList);
 
     // for (var obj of this.json_productList) {
     //   this.productList.append(JSON.parse(obj))
     // }
 
+
     this.tags = ["Blends", "Tea", "Utilities"]
-
-    for (var obj of this.productList) {
-      this.filteredList = new ProductComponent(obj.name, obj.price, obj.description, obj.id, "../assets/java-logo.jpg")
+    let i = 0
+    for (var obj of json) {
+      i = i + 1
+      console.log(i);
+      this.filteredList.push(new ProductComponent(obj.name, obj.price, obj.description, obj.id, "../assets/java-logo.jpg"))
     }
-  }
 
-
-  async getPrdList() {
-    let response = await fetch('http://localhost:8080/GetProducts', {
-      method: 'GET'
-    });
-    let text = await response.text();
-    return text;
+    return 0
   }
 
   // productList = [
