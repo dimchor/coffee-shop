@@ -186,3 +186,19 @@ func (p *ProductController) HasAdminRights(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"message": true})
 }
+
+// not safe
+func (p *ProductController) GetUserDetails(c *gin.Context) {
+	setupHeader(c)
+
+	token := c.Param("token")
+
+	userDetailsDto, err := p.productService.GetUserDetails(token)
+
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"message": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, userDetailsDto)
+}

@@ -1,7 +1,5 @@
 package types
 
-import "strconv"
-
 type User struct {
 	Base
 	Username    string `gorm:"unique"`
@@ -43,8 +41,8 @@ type UserChangePasswordDto struct {
 }
 
 func (u *User) ToDetailsDto() *UserDetailsDto {
-	return &UserDetailsDto{strconv.FormatUint(u.ID, 10), u.FirstName,
-		u.LastName, u.Address, u.AdminRights}
+	return &UserDetailsDto{u.Username, u.FirstName, u.LastName, u.Address,
+		u.AdminRights}
 }
 
 func (u *UserCreateDto) ToUser(salt string, hash string) *User {
