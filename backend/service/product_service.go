@@ -184,3 +184,19 @@ func (p *ProductService) changePassword(user *types.User, password string) error
 
 	return nil
 }
+
+func (p *ProductService) GetUserDetails(session_id string) (*types.UserDetailsDto, error) {
+	var session types.Session
+	result := p.db.First(&session, "token = ?", session_id)
+	if result.RowsAffected != 1 {
+		return nil, errors.New("token not found")
+	}
+
+	var user types.User
+	result = p.db.First(&user, session.UserID)
+	if result.RowsAffected != 1 {
+		return nil, errors.New("user not found")
+	}
+
+	return user.ToDetailsDto(), nil
+}
