@@ -18,6 +18,7 @@ export class ProductsPageComponent {
   json_productList: any
   productList: any
   filteredList: ProductComponent[] = []
+  prd_list: ProductComponent[] = []
   tags: any
   pList = [
     new ProductComponent('Java gia olous', '22.80', "Blends", "1001", "../assets/java-logo.jpg"),
@@ -36,6 +37,7 @@ export class ProductsPageComponent {
   }
 
   receiveMSG($event: ProductComponent[]) {
+    alert("Filtered Update")
     this.filteredList = $event
   }
 
@@ -54,45 +56,24 @@ export class ProductsPageComponent {
 
 
   async getPrdList() {
-    // const response = await fetch('http://localhost:8080/v1/get/products', {
-    //   method: 'GET'
-    // }).then((response) => response.json())
-    // //let text = await response.text();
-    // return response;
-
-    // this.http.get('http://localhost:8080/GetProducts').
-    //   subscribe((json_productList) => {
-    //     console.log(json_productList);
-    //     this.json_productList = json_productList;
-    //   });
-
-    //this.json_productList = this.http.get('http://localhost:8080/GetProducts')
-
-    //this.json_productList = this.getPrdList()
-
-
     const json = await fetch('http://localhost:8080/v1/get/products', {
       method: 'GET'
     }).then((response) => response.json())
 
-    console.log(json);
-
     this.productList = json
     console.log(this.productList);
-
-    // for (var obj of this.json_productList) {
-    //   this.productList.append(JSON.parse(obj))
-    // }
-
 
     this.tags = ["Blends", "Tea", "Utilities"]
     let i = 0
     for (var obj of json) {
       i = i + 1
       console.log(i);
-      this.filteredList.push(new ProductComponent(obj.name, obj.price, obj.description, obj.id, "../assets/java-logo.jpg"))
+      this.prd_list.push(new ProductComponent(obj.name, obj.price, obj.description, obj.id, "../assets/java-logo.jpg"))
     }
-
+    console.log(this.prd_list);
+    this.productList = this.prd_list
+    this.filteredList = this.prd_list
+    console.log(this.productList);
     return 0
   }
 
@@ -104,7 +85,6 @@ export class ProductsPageComponent {
   //   new ProductComponent('See sharp', '14.70', "Tea", "1005", "../assets/C_Logo.png"),
   //   new ProductComponent('See plus plus', '185.00', "Tea", "1006", "../assets/C_Logo.png"),
   //   new ProductComponent('Bython', '89.20', "Utilities", "1007", "../assets/java-logo.jpg")
-
   // ]
 
 }

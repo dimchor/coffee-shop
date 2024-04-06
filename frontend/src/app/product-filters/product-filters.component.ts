@@ -33,6 +33,7 @@ export class ProductFiltersComponent {
 
         if (!arg1) {
             if (this.radio == true) {
+                alert("RADIO:1, TEXT:0")
                 this.list.forEach((p, index) => {
 
                     if (p.pTag === this.selected_tag) {
@@ -41,8 +42,11 @@ export class ProductFiltersComponent {
                 });
             }
             else {
+                alert("RADIO:0, TEXT:0")
                 this.list.forEach((p, index) => {
                     this.res.push(p)
+                    console.log(p);
+
                 });
             }
             this.msg.emit(this.res)
@@ -51,23 +55,24 @@ export class ProductFiltersComponent {
 
         let i, j: string
         if (this.radio == false) {
+            alert("RADIO:0, TEXT:1")
             this.list.forEach((p, index) => {
 
                 i = p.pName.toLocaleLowerCase();
 
-                if (i.includes(arg1)) {
+                if (i.includes(arg1.toLocaleLowerCase())) {
                     this.res.push(p)
                 }
             });
         }
         else {
-
+            alert("RADIO:1, TEXT:1")
             this.list.forEach((p, index) => {
 
                 i = p.pName.toLocaleLowerCase();
                 j = p.pTag;
 
-                if (i.includes(arg1) && j === this.selected_tag) {
+                if (i.includes(arg1.toLocaleLowerCase()) && j === this.selected_tag) {
                     this.res.push(p)
                 }
 

@@ -18,15 +18,14 @@ export class AccountPageComponent {
   state = 2
   hasAdmin = false
   account: any
+  token: any
+  url = ""
   //orders = [{ ID: "128734", date: "22-2-2024", cost: "45.75", curStatus: "Completed" }]
   orders = [{ ID: "", date: "", cost: "", curStatus: "" }]
   //cart = [{ name: "", ID: "", cost: "" }]
   cart = [new ProductComponent('Java gia olous', '22.80', "Blends", "1001", "../assets/java-logo.jpg")]
   constructor(private http: HttpClient, public CartService: CartService, private router: Router) {
 
-
-    //API Call for account info
-    //
     this.account = this.getAccount()
 
     this.removeProduct(0)
@@ -35,18 +34,26 @@ export class AccountPageComponent {
   }
 
   async getAccount() {
-    const json = await fetch("http://localhost:8080/", {
+    this.token = localStorage.getItem("session")
+    this.token = this.token.replace(/(["])/g, "")
+    this.url = this.url.concat("http://localhost:8080/v1/get/has_admin_rights/", this.token)
+    const json = await fetch(this.url, {
       method: 'GET'
     }).then((response) => response.json())
 
-    if (json != null) {
-      localStorage.setItem('session', JSON.stringify(json.token))
-      this.router.navigate(['/account']);
+    if (json.message == true) {
+      this.hasAdmin = true
     }
+    else if (json.message == false) {
+      this.hasAdmin = false
+    }
+
+    //get account details
+
   }
 
   changePass() {
-    alert(this.ping());
+    alert("No");
   }
 
 
@@ -61,7 +68,16 @@ export class AccountPageComponent {
   }
 
   checkout() {
-
+    if (this.cart.length > 0) {
+      let dateTime = new Date()
+      var total = 0.0
+      for (var p of this.cart) {
+        total = total + parseFloat(p.pPrice)
+      }
+      this.orders.push({ ID: Math.floor(Math.random() * 99999).toString(), date: dateTime.toDateString(), cost: total.toString(), curStatus: "Pending" })
+      this.cart = []
+      alert("Order Submitted Successfully")
+    }
   }
 
   viewOrders() {
@@ -73,6 +89,7 @@ export class AccountPageComponent {
   }
 
   admin() {
+
     this.router.navigate(['/admin']);
   }
 }
