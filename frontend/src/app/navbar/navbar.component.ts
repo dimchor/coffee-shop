@@ -15,7 +15,13 @@ export class NavbarComponent {
   constructor(private router: Router) { }
   session = localStorage.getItem('session');
 
-  logout() {
+  async logout() {
+
+    // const json = await fetch("http://localhost:8080/v1/post/logout_user", {
+    //   method: 'POST',
+    //   //body: this.post_str
+    // }).then((response) => response.json())
+
     localStorage.removeItem('session');
     this.router.navigate(['/login']);
     //this.router.navigate(['/homepage']);

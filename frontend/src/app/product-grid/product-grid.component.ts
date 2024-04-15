@@ -24,6 +24,9 @@ export class ProductGridComponent implements OnChanges {
   }
 
   setCart(pr: ProductComponent): void {
-    this.CartService.pushList(pr)
+    const session = localStorage.getItem('session');
+    if (session) {
+      this.CartService.pushList(pr)
+    }
   }
 }
