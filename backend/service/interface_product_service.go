@@ -9,5 +9,7 @@ type IProductService interface {
 	PostNewUser(*types.UserCreateDto) error
 	PostLoginUser(*types.UserLoginDto) (string, error)
 	HasAdminRights(string) bool
+	GetUser(string) (*types.User, error)
 	GetUserDetails(string) (*types.UserDetailsDto, error)
+	ChangePassword(*types.User, string) error
 }

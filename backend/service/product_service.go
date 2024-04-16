@@ -51,7 +51,7 @@ func NewProductService(db *gorm.DB) (*ProductService, error) {
 	result := productService.db.First(&user, "username = ?", "root")
 
 	if result.RowsAffected == 1 {
-		err = productService.changePassword(&user, password)
+		err = productService.ChangePassword(&user, password)
 		if err != nil {
 			return nil, err
 		}
@@ -160,7 +160,7 @@ func (p *ProductService) HasAdminRights(session_id string) bool {
 	return user.AdminRights
 }
 
-func (p *ProductService) changePassword(user *types.User, password string) error {
+func (p *ProductService) ChangePassword(user *types.User, password string) error {
 	salt, err := p.makeSalt()
 	if err != nil {
 		return err
@@ -185,7 +185,7 @@ func (p *ProductService) changePassword(user *types.User, password string) error
 	return nil
 }
 
-func (p *ProductService) GetUserDetails(session_id string) (*types.UserDetailsDto, error) {
+func (p *ProductService) GetUser(session_id string) (*types.User, error) {
 	var session types.Session
 	result := p.db.First(&session, "token = ?", session_id)
 	if result.RowsAffected != 1 {
@@ -196,6 +196,15 @@ func (p *ProductService) GetUserDetails(session_id string) (*types.UserDetailsDt
 	result = p.db.First(&user, session.UserID)
 	if result.RowsAffected != 1 {
 		return nil, errors.New("user not found")
+	}
+
+	return &user, nil
+}
+
+func (p *ProductService) GetUserDetails(session_id string) (*types.UserDetailsDto, error) {
+	user, err := p.GetUser(session_id)
+	if err != nil {
+		return nil, err
 	}
 
 	return user.ToDetailsDto(), nil

@@ -35,8 +35,7 @@ type UserDetailsDto struct {
 }
 
 type UserChangePasswordDto struct {
-	Username    string `json:"username"`
-	OldPassword string `json:"old_password"`
+	Token       string `json:"token"`
 	NewPassword string `json:"new_password"`
 }
 
