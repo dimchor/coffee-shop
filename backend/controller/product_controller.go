@@ -202,3 +202,30 @@ func (p *ProductController) GetUserDetails(c *gin.Context) {
 
 	c.JSON(http.StatusOK, userDetailsDto)
 }
+
+// not safe
+func (p *ProductController) PostNewPassword(c *gin.Context) {
+	setupHeader(c)
+
+	var userDto types.UserChangePasswordDto
+
+	if err := c.BindJSON(&userDto); err != nil {
+		// status code 400 should be ok
+		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+		return
+	}
+
+	user, err := p.productService.GetUser(userDto.Token)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"message": err.Error()})
+		return
+	}
+
+	err = p.productService.ChangePassword(user, userDto.NewPassword)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "success"})
+}

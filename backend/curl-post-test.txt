@@ -1,3 +1,9 @@
 curl -X POST  -H "Accept: Application/json" -H "Content-Type: application/json" http://127.1:8080/v1/post/bean -d '{"product":{"id":3, "name":"Filter with Rum flavour","price":4.43},"species":"80% Arabica 20% Robusta","area":"","weight":200}'
 
 curl -X POST  -H "Accept: Application/json" -H "Content-Type: application/json" http://127.1:8080/v1/post/cup -d '{"product":{"id":4, "name":"Large cup XMAS Edition", "price":3.5}, "size":2}'
+
+new password json:
+{
+  "token": "8e6dad7d-b3a1-4c94-baa0-cec3651e3987",
+  "new_password": "candy"
+}

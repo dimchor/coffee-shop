@@ -80,6 +80,7 @@ func main() {
 	r.POST("/v1/post/new_user", productController.PostNewUser)
 	r.POST("/v1/post/login_user", productController.PostLoginUser)
 	r.POST("/v1/post/logout_user", productController.PostLogoutUser)
+	r.POST("/v1/post/new_password", productController.PostNewPassword)
 
 	r.Run()
 }

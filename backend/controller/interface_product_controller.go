@@ -11,4 +11,5 @@ type IProductController interface {
 	PostLoginUser(*gin.Context)
 	PostLogoutUser(*gin.Context)
 	HasAdminRights(*gin.Context)
+	PostNewPassword(c *gin.Context)
 }
