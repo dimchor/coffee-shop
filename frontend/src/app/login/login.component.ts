@@ -21,7 +21,7 @@ export class LoginComponent {
 
   username = ""
   password = ""
-
+  status_code: any
 
   post_str = ""
   constructor(private router: Router, private http: HttpClient) { }
@@ -34,13 +34,19 @@ export class LoginComponent {
     const json = await fetch("http://localhost:8080/v1/post/login_user", {
       method: 'POST',
       body: this.post_str
-    }).then((response) => response.json())
-
-    console.log(json)
-
-    if (json != null) {
+    }).then((response) => { this.status_code = response; return response.json() })
+    // const status = await fetch("http://localhost:8080/v1/post/login_user", {
+    //   method: 'POST',
+    //   body: this.post_str
+    // }).then((response) => response)
+    // alert(pass)
+    // alert(json)
+    if (this.status_code.status === 200) {
       localStorage.setItem('session', JSON.stringify(json))
       this.router.navigate(['/account']);
+    }
+    else {
+      alert("Incorrect Username or Password")
     }
 
     return null

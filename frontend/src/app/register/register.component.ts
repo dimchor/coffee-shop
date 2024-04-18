@@ -28,13 +28,14 @@ export class RegisterComponent {
   }
 
   post_str = ""
+  status_code: any;
 
   constructor(private router: Router, private http: HttpClient) { };
   session: any;
 
   async register(user: string, pass: string, fn: string, ln: string, addr: string) {
 
-    alert(user + pass)
+    //alert(user + pass)
 
     this.post_str = JSON.stringify({
       "username": user,
@@ -47,11 +48,22 @@ export class RegisterComponent {
     const json = await fetch("http://localhost:8080/v1/post/new_user", {
       method: 'POST',
       body: this.post_str
-    }).then((response) => response.json())
+    }).then((response) => { this.status_code = response; return response.json() })
 
-    if (json != null) {
-      localStorage.setItem('session', JSON.stringify(json.token))
-      this.router.navigate(['/account']);
+    if (this.status_code.status === 201) {
+      alert("User registered successfully.")
+
+      var post_str2 = JSON.stringify({ "username": user, "password": pass })
+      const json2 = await fetch("http://localhost:8080/v1/post/login_user", {
+        method: 'POST',
+        body: post_str2
+      }).then((response) => { this.status_code = response; return response.json() })
+
+      if (this.status_code.status === 200) {
+        localStorage.setItem('session', JSON.stringify(json2))
+        this.router.navigate(['/account']);
+      }
+
     }
   }
 

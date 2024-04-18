@@ -7,12 +7,21 @@
                 <img id="pfp" src="/assets/pfp_default.png" alt="image">
             </div>
             <div id="username">
-                <h4 id="username-heading" style="text-align:center">{{username}}</h4>
+                <h4 id="username-heading" style="text-align:center">Username: {{username}}</h4>
+            </div>
+            <div id="first_name">
+                <h4 id="first_name-heading" style="text-align:center">First name: {{first_name}}</h4>
+            </div>
+            <div id="last_name">
+                <h4 id="last_name-heading" style="text-align:center">Last name: {{last_name}}</h4>
+            </div>
+            <div id="address">
+                <h4 id="address-heading" style="text-align:center">Address: {{address}}</h4>
             </div>
             <div class="user-content">
                 <div class="user-btn-div"><button class="user-btn" (click)="viewOrders()">View Orders</button></div>
                 <div class="user-btn-div"><button class="user-btn" (click)="viewCart()">Shopping Cart</button></div>
-                <div class="user-btn-div"><button class="user-btn" (click)="changePass()">Change Password</button></div>
+                <div class="user-btn-div"><button class="user-btn" (click)="pass()">Change Password</button></div>
                 <div class="user-btn-div"><button class="user-btn" (click)="checkout()">Proceed to checkout</button>
                 </div>
                 <div class="user-btn-div" *ngIf="hasAdmin == true"><button (click)="admin()">Admin interface</button>
@@ -62,6 +71,16 @@
                         <td><button class="remove-btn" (click)="removeProduct(ii)">-</button></td>
                     </tr>
                 </table>
+            </div>
+        </div>
+
+        <div class="cart" *ngIf="state==3">
+            <div>
+                <h3 style="text-align:center">Change Password</h3>
+                <div class="user-btn-div"><input type="password" [(ngModel)]="password" placeholder="Password"></div>
+                <div class="user-btn-div"><input type="password" [(ngModel)]="confirm_password"
+                        placeholder="Confirm Password"></div>
+                <div class="user-btn-div"><button (click)="changePass(password, confirm_password)">Submit</button></div>
             </div>
         </div>
 
